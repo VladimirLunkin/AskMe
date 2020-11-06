@@ -39,3 +39,13 @@ code {
   width: 50px;
   height: 50px;
 }
+
+.img-settings {
+    width: 150px;
+    height: 150px;
+}
+
+.right-rounded {
+    border-top-right-radius: 3rem!important;
+    border-bottom-right-radius: 3rem!important;
+}

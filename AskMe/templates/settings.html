@@ -1,0 +1,93 @@
+{% extends 'inc/base.html' %}
+{% load static %}
+
+{% block navbar %}
+<div style="margin-right: 200px" class="mr-md-0 d-flex mt-md-2">
+	<div class="row mx-2">
+		<img src="{% static "img/avatar.jpg" %}" class="avatar-img rounded">
+	</div>
+	<div class="d-flex flex-column bd-highlight mb-2">
+		<div>
+			<a href="#" class="h5 text-light bg-dark">lil_ollegik</a>
+		</div>
+		<div class="d-flex justify-content-start">
+			<a href="/settings/"><u>settings</u></a>
+			&nbsp;
+			<a href="#"><u>log out</u></a>
+		</div>
+	</div>
+</div>
+{% endblock navbar %}
+
+{% block heading %}
+<div class="row mt-5 mt-md-0">
+    <div class="mr-4 h3 text-dark">Settings:</div>
+    <span class="h3 text-dark">Dr. Pepper</span>
+</div>
+{% endblock heading %}
+
+{% block content %}
+<form>
+    <div class="form-group row mt-2">
+        <label for="inputLogin" class="col-sm-2 col-form-label">Login</label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputLogin" placeholder="dr_pepper">
+        </div>
+    </div>
+    <div class="form-group row mt-2">
+        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputEmail" placeholder="dr.pepper@mail.ru">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputNickName" class="col-sm-2 col-form-label">NickName</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" id="inputNickName" placeholder="Dr. Pepper">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputTags" class="col-sm-2 col-form-label">Upload avatar</label>
+        <div class="col-sm-10 d-flex flex-column">
+            <img src="{% static "img/avatar.jpg" %}" alt="..." class="img-settings img-thumbnail">
+            <div class="row mt-3">
+                <span class="border border-dark py-2 px-2 mx-3" id="inputTags">c:\avatar.jpg</span>
+                <button type="submit" class="btn btn-outline-dark rounded-left right-rounded">choose</button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-outline-dark">ASK!</button>
+        </div>
+    </div>
+</form>
+{% endblock content %}
+
+{% block right %}
+<div class="d-flex flex-column ml-4">
+    <div class="p-2 mb-2">
+        <h3 class="text-dark">Popular Tags</h3>
+        <div class="d-flex flex-wrap h5">
+            <a class="my-1 mr-2 text-info" href="#">perl</a>
+            <a class="my-1 mr-2 text-danger" href="#">python</a>
+            <a class="my-1 mr-2 text-success" href="#">TechnoPark</a>
+            <a class="my-1 mr-2 text-muted" href="#">MySQL</a>
+            <a class="my-1 mr-2 text-dark" href="#">django</a>
+            <a class="my-1 mr-2 text-warning" href="#">Mail.Ru</a>
+            <a class="my-1 mr-2 " href="#">Google</a>
+            <a class="my-1 mr-2 text-dark" href="#">Firefox</a>
+        </div>
+    </div>
+    <div class="p-2">
+        <div class="list-group list-group-flush">
+            <h3 class="text-dark">Best Members</h3>
+            <a href="#" class="my-1"><u>Mr. Freeman</u></a>
+            <a href="#" class="my-1"><u>Dr. House</u></a>
+            <a href="#" class="my-1"><u>Bender</u></a>
+            <a href="#" class="my-1"><u>Queen Victoria</u></a>
+        </div>
+    </div>
+</div>
+{% endblock right %}

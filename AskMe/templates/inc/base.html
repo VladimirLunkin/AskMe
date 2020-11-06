@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+	<meta charset="utf-8">
+	<title>AskMe Project</title>
+
+	<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+	<link href="{% static "css/my.css" %}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column h-100">
+	<header>
+		<nav class="navbar navbar-dark d-flex justify-content-between justify-content-md-around fixed-top bg-dark">
+			<a class="navbar-brand" href="/">AskMe</a>
+			<form class="d-flex mt-md-0">
+				<div class="flex-fill mr-2 my-2 my-md-0">
+					<input class="form-control" type="text" placeholder="&#128269;Search" aria-label="Search">
+				</div>
+				<button class="flex-fill btn btn-outline-success my-2 my-md-0" type="submit">ASK!</button>
+			</form>
+			{% block navbar %}
+			{% endblock navbar %}
+		</nav>
+	</header>
+
+	<main role="main" class="flex-shrink-0">
+		<div class="container mt-5">
+			{% block heading %}
+			{% endblock heading %}
+			<div class="row">
+				<div class="col-8">
+					{% block content %}
+					{% endblock content %}
+				</div>
+				<div class="col-4">
+					{% include 'inc/right.html' %}
+				</div>
+			</div>
+		</div>
+	</main>
+
+	{% include 'inc/footer.html' %}
+	<script src="js/jquery.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+</body>
+</html>
