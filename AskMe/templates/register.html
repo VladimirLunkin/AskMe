@@ -6,34 +6,57 @@
 {% endblock navbar %}
 
 {% block heading %}
+<div class="row mt-5 mt-md-0">
+    <h3 class="mr-4 h3 text-dark">Registration</h3>
+</div>
 {% endblock heading %}
 
 {% block content %}
+<form>
+    <div class="form-group row mt-2">
+        <label for="inputLogin" class="col-sm-3 col-form-label">Login</label>
+        <div class="col-sm-9">
+            <input type="email" class="form-control" id="inputLogin" placeholder="dr_pepper" required>
+        </div>
+    </div>
+    <div class="form-group row mt-2">
+        <label for="inputEmail" class="col-sm-3 col-form-label">Email</label>
+        <div class="col-sm-9">
+            <input type="email" class="form-control" id="inputEmail" placeholder="dr.pepper@mail.ru" required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputNickName" class="col-sm-3 col-form-label">NickName</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="inputNickName" placeholder="Dr. Pepper" required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
+        <div class="col-sm-9">
+            <input type="password" class="form-control" id="inputPassword" required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputRepeatPassword" class="col-sm-3 col-form-label">Repeat password</label>
+        <div class="col-sm-9">
+            <input type="password" class="form-control" id="inputRepeatPassword" required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputTags" class="col-sm-3 col-form-label">Upload avatar</label>
+        <div class="col-sm-5">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                <label class="custom-file-label" for="validatedCustomFile" data-browse="choose">c:\avatar.jpg</label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+            <button type="submit" class="btn btn-outline-dark">Register!</button>
+        </div>
+    </div>
+</form>
 {% endblock content %}
-
-{% block right %}
-<div class="d-flex flex-column ml-4">
-    <div class="p-2 mb-2">
-        <h3 class="text-dark">Popular Tags</h3>
-        <div class="d-flex flex-wrap h5">
-            <a class="my-1 mr-2 text-info" href="#">perl</a>
-            <a class="my-1 mr-2 text-danger" href="#">python</a>
-            <a class="my-1 mr-2 text-success" href="#">TechnoPark</a>
-            <a class="my-1 mr-2 text-muted" href="#">MySQL</a>
-            <a class="my-1 mr-2 text-dark" href="#">django</a>
-            <a class="my-1 mr-2 text-warning" href="#">Mail.Ru</a>
-            <a class="my-1 mr-2 " href="#">Google</a>
-            <a class="my-1 mr-2 text-dark" href="#">Firefox</a>
-        </div>
-    </div>
-    <div class="p-2">
-        <div class="list-group list-group-flush">
-            <h3 class="text-dark">Best Members</h3>
-            <a href="#" class="my-1"><u>Mr. Freeman</u></a>
-            <a href="#" class="my-1"><u>Dr. House</u></a>
-            <a href="#" class="my-1"><u>Bender</u></a>
-            <a href="#" class="my-1"><u>Queen Victoria</u></a>
-        </div>
-    </div>
-</div>
-{% endblock right %}

@@ -2,40 +2,40 @@
 {% load static %}
 
 {% block navbar %}
-    {% include 'inc/nav_authorization.html' %}
+{% include 'inc/nav_authorization.html' %}
 {% endblock navbar %}
 
 {% block heading %}
 <div class="row mt-5 mt-md-0">
-	<a class="mr-4 h3 text-dark" href="#">New Questions</a>
+    <h3 class="mr-4 text-dark" href="#">New Question</h3>
 </div>
 {% endblock heading %}
 
 {% block content %}
 <form>
-  <div class="form-group row mt-2">
-    <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
-    <div class="col-sm-10">
-      <input type="email" class="form-control" id="inputTitle">
+    <div class="form-group row mt-2">
+        <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control" id="inputTitle">
+        </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <label for="inputText" class="col-sm-2 col-form-label">Tags</label>
-    <div class="col-sm-10">
-    <textarea class="form-control" id="inputText" rows="7"></textarea>
-    </div>
-  </div>
     <div class="form-group row">
-    <label for="inputTags" class="col-sm-2 col-form-label">Tags</label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputTags">
+        <label for="inputText" class="col-sm-2 col-form-label">Text</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" id="inputText" rows="7"></textarea>
+        </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <div class="col-sm-2"></div>
-    <div class="col-sm-10">
-      <button type="submit" class="btn btn-dark">ASK!</button>
+    <div class="form-group row">
+        <label for="inputTags" class="col-sm-2 col-form-label">Tags</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputTags">
+        </div>
     </div>
-  </div>
+    <div class="form-group row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-dark">ASK!</button>
+        </div>
+    </div>
 </form>
 {% endblock content %}
