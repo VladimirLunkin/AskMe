@@ -1,0 +1,19 @@
+{% extends 'inc/base.html' %}
+{% load static %}
+
+{% block navbar %}
+	{% include 'inc/navbar_user.html' %}
+{% endblock navbar %}
+
+{% block heading %}
+<a class="col-3 h3 text-dark" href="{% url 'new_questoins' %}">New Questions</a>
+<a class="my-auto" href="{% url 'hot_questions' %}"><u>Hot Questions</u></a>
+{% endblock heading %}
+
+{% block content %}
+	{% for question in content %}
+		{% include 'inc/one_question.html' %}
+	{% endfor %}
+
+	{% include 'inc/pagination.html' %}
+{% endblock content %}

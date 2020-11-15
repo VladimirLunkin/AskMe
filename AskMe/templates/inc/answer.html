@@ -1,0 +1,19 @@
+{% load static %}
+<div class="row media d-flex flex-wrap question-box">
+	<div class="d-flex px-1 mr-4 flex-column">
+		<img src="{% static answer.img %}" class="question-img mb-2" alt="...">
+		<div class="btn-group" role="group" aria-label="">
+			<button type="button" class="btn btn-outline-dark">&#9757;</button>
+			<span class="btn btn-outline-dark">{{ answer.like }}</span>
+		</div>
+    </div>
+    <div class="media-body px-1">
+        <p>{{ answer.text }}</p>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" checked>
+            <label class="form-check-label">
+				Correct!
+            </label>
+        </div>
+	</div>
+</div>

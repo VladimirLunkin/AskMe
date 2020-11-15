@@ -2,14 +2,12 @@
 {% load static %}
 
 {% block navbar %}
-{% include 'inc/nav_account.html' %}
+    {% include 'inc/navbar_user.html' %}
 {% endblock navbar %}
 
 {% block heading %}
-<div class="row mt-5 mt-md-0">
-    <div class="mr-4 h3 text-dark">Settings:</div>
-    <span class="h3 text-dark">Dr. Pepper</span>
-</div>
+<h3>Settings:&nbsp;&nbsp;</h3>
+<h3>Dr. Pepper</h3>
 {% endblock heading %}
 
 {% block content %}
@@ -35,7 +33,7 @@
     <div class="form-group row">
         <label for="inputTags" class="col-sm-2 col-form-label">Upload avatar</label>
         <div class="col-sm-5">
-            <img src="{% static "img/avatar.jpg" %}" alt="..." class="img-settings img-thumbnail">
+            <img src="{% static "img/ava1.png" %}" alt="..." class="img-settings img-thumbnail">
             <div class="custom-file mt-2">
                 <input type="file" class="custom-file-input" id="validatedCustomFile" required>
                 <label class="custom-file-label" for="validatedCustomFile" data-browse="choose">c:\avatar.jpg</label>

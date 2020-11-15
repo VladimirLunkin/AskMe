@@ -1,25 +1,21 @@
 {% load static %}
-<nav class="navbar navbar-dark d-flex justify-content-between justify-content-md-around fixed-top bg-dark">
-    <a class="navbar-brand" href="/">AskMe</a>
-    <form class="d-flex mt-md-0">
-        <div class="flex-fill mr-2 my-2 my-md-0">
-            <input class="form-control" type="text" placeholder="&#128269;Search" aria-label="Search">
+<header>
+    <nav class="navbar navbar-dark d-flex justify-content-between justify-content-md-around fixed-top bg-dark" style="height: 81.6px">
+        <a class="navbar-brand" href="{% url 'create_ask' %}">AskMe</a>
+        <form class="d-flex mt-md-0">
+            <div class="flex-fill mr-2 my-2 my-md-0">
+                <input class="form-control" type="text" placeholder="&#128269;Search" aria-label="Search">
+            </div>
+            <button class="flex-fill btn btn-outline-success my-2 my-md-0" type="submit">ASK!</button>
+        </form>
+        {% block user %}
+        <div class="mr-md-0 d-flex mt-md-2" style="margin-right: 400px; width: 182.54px">
+            <div class="d-flex justify-content-start mx-auto">
+                <a href="{% url 'login' %}"><u>log in</u></a>
+                &nbsp;&nbsp;&nbsp;
+                <a href="{% url 'signup' %}"><u>register</u></a>
+            </div>
         </div>
-        <button class="flex-fill btn btn-outline-success my-2 my-md-0" type="submit">ASK!</button>
-    </form>
-    <div style="margin-right: 200px" class="mr-md-0 d-flex mt-md-2">
-    <div class="row mx-2">
-        <img src="{% static "img/avatar.jpg" %}" class="avatar-img rounded">
-    </div>
-    <div class="d-flex flex-column bd-highlight mb-2">
-        <div>
-            <a href="#" class="h5 text-light bg-dark">lil_ollegik</a>
-        </div>
-        <div class="d-flex justify-content-start">
-            <a href="#"><u>settings</u></a>
-            &nbsp;
-            <a href="#"><u>log out</u></a>
-        </div>
-    </div>
-</div>
-</nav>
+        {% endblock user %}
+    </nav>
+</header>

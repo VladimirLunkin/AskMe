@@ -1,0 +1,19 @@
+{% extends 'inc/base.html' %}
+{% load static %}
+
+{% block navbar %}
+	{% include 'inc/navbar.html' %}
+{% endblock navbar %}
+
+{% block heading %}
+<h3>Tag:&nbsp;&nbsp;</h3>
+<h3>python</h3>
+{% endblock heading %}
+
+{% block content %}
+	{% for question in content %}
+		{% include 'inc/one_question.html' %}
+	{% endfor %}
+
+	{% include 'inc/pagination.html' %}
+{% endblock content %}

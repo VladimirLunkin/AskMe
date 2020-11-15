@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block navbar %}
-{% include 'inc/nav_authorization.html' %}
+    {% include 'inc/navbar.html' %}
 {% endblock navbar %}
 
 {% block heading %}
-<div class="mr-4 h3 text-dark">Log in</div>
+<h3>Log in</h3>
 {% endblock heading %}
 
 {% block content %}
@@ -32,7 +32,7 @@
     <div class="form-group row">
         <div class="col-sm-2"></div>
         <div class="col-sm-10">
-            <a href="/register/" class=""><u>create new account</u></a>
+            <a href="{% url 'signup' %}" class=""><u>create new account</u></a>
         </div>
     </div>
 </form>

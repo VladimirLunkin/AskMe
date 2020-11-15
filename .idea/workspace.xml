@@ -20,18 +20,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66401658-fe95-40fd-87dc-02e5aed525e1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AskMe/AskMe/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/AskMe/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AskMe/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/app/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AskMe/templates/add_ask.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/add_ask.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/static/img/1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/static/img/ava2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/static/img/avatar.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/add_ask.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/ask.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/AskMe/templates/inc/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/inc/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AskMe/templates/inc/nav_account.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/inc/nav_account.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AskMe/templates/inc/nav_authorization.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/inc/nav_authorization.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/inc/nav_account.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/inc/nav_authorization.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/inc/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/inc/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/inc/pagination.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/inc/pagination.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AskMe/templates/inc/right.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/inc/right.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AskMe/templates/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AskMe/templates/log_in.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/log_in.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AskMe/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/list_ask.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/list_ask_tag.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/log_in.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AskMe/templates/register.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/AskMe/templates/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/AskMe/templates/settings.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -118,5 +124,15 @@
       <screen x="78" y="34" width="1842" height="1046" />
     </state>
     <state x="729" y="258" width="530" height="605" key="FileChooserDialogImpl/78.34.1842.1046@78.34.1842.1046" timestamp="1604562951606" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/AskMe/AskMe/urls.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

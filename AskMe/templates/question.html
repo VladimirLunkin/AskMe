@@ -1,0 +1,51 @@
+{% extends 'inc/base.html' %}
+{% load static %}
+
+{% block navbar %}
+	{% include 'inc/navbar.html' %}
+{% endblock navbar %}
+
+{% block content %}
+
+<!-- {% include 'inc/one_question.html' %} -->
+<div class="row media d-flex flex-wrap">
+	<div class="d-flex px-1 mr-4 flex-column">
+		<img src="{% static question.img %}" class="question-img mb-2" alt="...">
+		<div class="btn-group" role="group" aria-label="">
+			<button type="button" class="btn btn-outline-dark">&#9757;</button>
+			<span class="btn btn-outline-dark">{{ question.like }}</span>
+		</div>
+	</div>
+	<div class="media-body">
+		<h5 class="mt-0"><u>{{ question.title }}</u></h5>
+		<p>{{ question.text }}</p>
+		<div class="row">
+			<div class="col">
+				<div class="d-flex flex-wrap">
+					<p class="mr-1">Tags:</p>
+					<a class="mr-1" href="#"><u>black-jack</u></a>
+					<a class="mr-1" href="#"><u>bender</u></a>
+					<a class="mr-1" href="#"><u>TechnoPark</u></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<hr class="row" color="#343a40">
+
+{% for answer in content %}
+	{% include 'inc/answer.html' %}
+{% endfor %}
+
+{% include 'inc/pagination.html' %}
+
+<hr class="row mt-3" color="#343a40" style="height: .1px; border: none">
+<div class="" style="">
+    <div class="row mt-3">
+        <textarea class="form-control" id="inputText" rows="2" placeholder="Enter your answer here..."></textarea>
+    </div>
+    <div class="row my-2">
+        <button type="submit" class="btn btn-dark">Answer</button>
+    </div>
+</div>
+{% endblock content %}
