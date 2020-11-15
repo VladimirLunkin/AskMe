@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from random import randint
+from app.models import Questions
 
 
 questions = [
@@ -10,7 +11,7 @@ questions = [
         'like': (randint(0, 120) % 100),
         'title': f'Media with stretched link? {idx}',
         'text': 'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.',
-    } for idx in range(1, 21)
+    } for idx in range(1, 11)
 ]
 
 answers = [
