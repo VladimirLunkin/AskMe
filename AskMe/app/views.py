@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
+from app.models import Question, Answer
 from random import randint
-from app.models import Questions
 
 
 questions = [
@@ -24,53 +24,56 @@ answers = [
     } for idx in range(1, 5)
 ]
 
-def paginate(objects_list, request, per_page = 2):
+
+def paginate(objects_list, request, per_page=2):
     paginator = Paginator(objects_list, per_page)
     page_num = request.GET.get('page')
-    # try:
-    #     page = paginator.page(page_num)
-    # except PageNotAnInteger:
-    #     page = paginator.page(1)
-    # except EmptyPage:
-    #     page = paginator.page(paginator.num_pages)
 
     return paginator.get_page(page_num)
 
 
-def new_questoins(request):
-    questions_page = paginate(questions, request)
-    return render(request, 'new_questoins.html', {
+def new_questions(request):
+    questions_page = paginate(Question.objects1.all(), request)
+    return render(request, 'new_questions.html', {
         'content': questions_page,
     })
+
 
 def create_ask(request):
     return render(request, 'create_ask.html', {})
 
-def question(request, pk):
-    question = questions[pk - 1]
+
+def question_page(request, pk):
+    question = Question.objects1.get(id=pk)
     answers_page = paginate(answers, request, 1)
     return render(request, 'question.html', {
         'question': question,
         'content': answers_page,
     })
 
+
 def hot_questions(request):
-    questions_page = paginate(questions, request)
+    questions_page = paginate(Question.objects1.all(), request)
     return render(request, 'hot_questions.html', {
         'content': questions_page,
     })
 
-def questions_by_tag(request):
-    questions_page = paginate(questions, request)
+
+def questions_by_tag(request, tag):
+    questions_page = paginate(Question.objects1.by_tag(tag), request)
     return render(request, 'questions_by_tag.html', {
         'content': questions_page,
+        'tag': tag,
     })
+
 
 def settings(request):
     return render(request, 'settings.html', {})
 
+
 def login(request):
     return render(request, 'login.html', {})
+
 
 def signup(request):
     return render(request, 'signup.html', {})
