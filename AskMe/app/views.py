@@ -34,6 +34,7 @@ def paginate(objects_list, request, per_page=2):
 
 def new_questions(request):
     questions_page = paginate(Question.objects1.all(), request)
+    answers_page = paginate(Answer.objects1.all(), request, 1)  #для количиства ответов
     return render(request, 'new_questions.html', {
         'content': questions_page,
     })
@@ -45,7 +46,7 @@ def create_ask(request):
 
 def question_page(request, pk):
     question = Question.objects1.get(id=pk)
-    answers_page = paginate(answers, request, 1)
+    answers_page = paginate(Answer.objects1.by_question(pk), request, 1)
     return render(request, 'question.html', {
         'question': question,
         'content': answers_page,

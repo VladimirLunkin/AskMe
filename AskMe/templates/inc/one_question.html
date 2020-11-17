@@ -4,7 +4,7 @@
 		<img src="{% static question.profile_id.avatar %}" class="question-img mb-2" alt="...">
 		<div class="btn-group" role="group" aria-label="">
 			<button type="button" class="btn btn-outline-dark">&#9757;</button>
-			<span class="btn btn-outline-dark"></span>
+			<span class="btn btn-outline-dark">{{ question.like }}</span>
 		</div>
 	</div>
 	<div class="media-body px-1">
@@ -12,7 +12,7 @@
 		<p>{{ question.text }}</p>
 		<div class="row">
 			<div class="col-auto">
-				<a href="{% url 'question' question.id %}" class="stretched-link"><u>answer (3)</u></a>
+				<a href="{% url 'question' question.id %}" class="stretched-link"><u>answer ({{ question.number_of_answers }})</u></a>
 			</div>
 			<div class="col">
 				<div class="d-flex flex-wrap">

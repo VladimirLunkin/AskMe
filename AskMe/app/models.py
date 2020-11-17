@@ -26,11 +26,8 @@ class Tag(models.Model):
 
 
 class QuestionManager(models.Manager):
-    def get_queryset(self):
-        return super(QuestionManager, self).get_queryset()
-
     def by_tag(self, tag):
-        return super(QuestionManager, self).get_queryset().filter(tags__tag=tag)
+        return self.filter(tags__tag=tag)
 
 
 class Question(models.Model):
@@ -39,6 +36,8 @@ class Question(models.Model):
     text = models.TextField(verbose_name='Текст')
     tags = models.ManyToManyField(Tag)
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    like = models.IntegerField(default=0)
+    number_of_answers = models.IntegerField(default=0)
 
     objects1 = QuestionManager()
 
@@ -50,15 +49,34 @@ class Question(models.Model):
         verbose_name_plural = 'Вопросы'
 
 
+class AnswerManager(models.Manager):
+    def by_question(self, pk):
+        return self.filter(question_id=pk)
+
+
 class Answer(models.Model):
     profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE)
     question_id = models.ForeignKey('Question', on_delete=models.CASCADE)
     text = models.TextField(verbose_name='Текст')
     is_correct = models.BooleanField(default=False, verbose_name='Чекбокс')
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    like = models.IntegerField(default=0)
+
+    objects1 = AnswerManager()
 
     def __str__(self):
         return self.question_id.title
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.question_id.number_of_answers += 1
+            self.question_id.save()
+        super(Answer, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.question_id.number_of_answers -= 1
+        self.question_id.save()
+        super(Answer, self).delete(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Ответ'
@@ -73,7 +91,25 @@ class LikeQuestion(models.Model):
     def __str__(self):
         return self.profile_id.user_id.get_username() + ' лайкнул "' + self.question_id.title + '"'
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.is_like:
+                self.question_id.like += 1
+            else:
+                self.question_id.like -= 1
+            self.question_id.save()
+        super(LikeQuestion, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.is_like:
+            self.question_id.like -= 1
+        else:
+            self.question_id.like += 1
+        self.question_id.save()
+        super(LikeQuestion, self).delete(*args, **kwargs)
+
     class Meta:
+        unique_together = ('question_id', 'profile_id')
         verbose_name = 'Лайк вопроса'
         verbose_name_plural = 'Лайки вопросов'
 
@@ -86,6 +122,24 @@ class LikeAnswer(models.Model):
     def __str__(self):
         return self.profile_id.user_id.get_username() + ' лайкнул "' + self.answer_id.question_id.title + '"'
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.is_like:
+                self.answer_id.like += 1
+            else:
+                self.answer_id.like -= 1
+            self.answer_id.save()
+        super(LikeAnswer, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.is_like:
+            self.answer_id.like -= 1
+        else:
+            self.answer_id.like += 1
+        self.answer_id.save()
+        super(LikeAnswer, self).delete(*args, **kwargs)
+
     class Meta:
+        unique_together = ('answer_id', 'profile_id')
         verbose_name = 'Лайк ответа'
         verbose_name_plural = 'Лайки ответов'
