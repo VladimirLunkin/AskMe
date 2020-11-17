@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from random import sample, randint
 
 
 class Profile(models.Model):
@@ -14,8 +15,17 @@ class Profile(models.Model):
         verbose_name_plural = 'Профили'
 
 
+class TagManager(models.Manager):
+    def create_question(self):
+        num_tag = Tag.objects.count()
+        list_id = [i for i in range(1, num_tag + 1)]
+        return Tag.objects.filter(id__in=sample(list_id, k=randint(1, 3)))
+
+
 class Tag(models.Model):
     tag = models.CharField(max_length=32, verbose_name='Тег')
+
+    objects = TagManager()
 
     def __str__(self):
         return self.tag

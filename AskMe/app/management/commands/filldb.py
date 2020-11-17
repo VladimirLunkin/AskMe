@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from app.models import Profile, Question, Answer, Tag
-from random import choice
+from random import sample
 from faker import Faker
 
 f = Faker()
@@ -19,16 +19,20 @@ class Command(BaseCommand):
         parser.add_argument('--db_size', nargs='+', type=str)
 
     def handle(self, *args, **options):
+        # try:
+        #     self.fill_profile(options['users'][0])
+        # except Profile.DoesNotExist:
+        #     raise CommandError('Users does not exist')
+
+        # try:
+        #     self.fill_tag(options['tags'][0])
+        # except Tag.DoesNotExist:
+        #     raise CommandError('Users does not exist')
+
         try:
-            users = options['users'][0]
-            tags = options['tags'][0]
-            questions = options['questions'][0]
-        except Poll.DoesNotExist:
+            self.fill_questions(options['questions'][0])
+        except Question.DoesNotExist:
             raise CommandError('Users does not exist')
-        self.fill_profile(users)
-        self.fill_tag(tags)
-        self.fill_questions(questions)
-        #self.fill_profile(users)
 
         self.stdout.write(self.style.SUCCESS('Successfully closed poll '))
 
@@ -53,24 +57,15 @@ class Command(BaseCommand):
 
     @staticmethod
     def fill_questions(cnt):
-        profile_ids = list(
-            Tag.objects.values_list(
-                'pk', flat=True
-            )
-        )
-        tag_ids = list(
-            Tag.objects.values_list(
-                'id', flat=True
-            )
-        )
-        profile_count = Profile.objects.cou
+        profile_count = Profile.objects.count() - 1
         for i in range(cnt):
-            Question.objects1.create(
-                profile_id=Profile.objects.get(id=randint(1, )),
+            q = Question.objects1.create(
+                profile_id=Profile.objects.get(id=i+1),#f.random_int(min=1, max=profile_count)),
                 title=f.sentence(),
                 text=f.text(),
-                # tags=,
+                # tags=Tag.objects.filter(id__in=sample(list(Tag.objects.all()), k=f.random_int(min=1, max=3))),
             )
+            q.tags.set(Tag.objects.create_question()),
 
     # @staticmethod
     # def fill_profile(cnt):
