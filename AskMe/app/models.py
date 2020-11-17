@@ -3,9 +3,21 @@ from django.contrib.auth.models import User
 from random import sample, randint
 
 
+class ProfileManager(models.Manager):
+    def sample_profile(self, count):
+        profile_ids = list(
+            Profile.objects.values_list(
+                'id', flat=True
+            )
+        )
+        return Profile.objects.filter(id__in=sample(profile_ids, k=count))
+
+
 class Profile(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     avatar = models.ImageField(null=True)
+
+    objects = ProfileManager()
 
     def __str__(self):
         return self.user_id.get_username()
@@ -17,9 +29,12 @@ class Profile(models.Model):
 
 class TagManager(models.Manager):
     def create_question(self):
-        num_tag = Tag.objects.count()
-        list_id = [i for i in range(1, num_tag + 1)]
-        return Tag.objects.filter(id__in=sample(list_id, k=randint(1, 3)))
+        tag_ids = list(
+            Tag.objects.values_list(
+                'id', flat=True
+            )
+        )
+        return Tag.objects.filter(id__in=sample(tag_ids, k=randint(1, 3)))
 
 
 class Tag(models.Model):
@@ -49,7 +64,7 @@ class Question(models.Model):
     like = models.IntegerField(default=0)
     number_of_answers = models.IntegerField(default=0)
 
-    objects1 = QuestionManager()
+    objects = QuestionManager()
 
     def __str__(self):
         return self.title
@@ -72,7 +87,7 @@ class Answer(models.Model):
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
     like = models.IntegerField(default=0)
 
-    objects1 = AnswerManager()
+    objects = AnswerManager()
 
     def __str__(self):
         return self.question_id.title

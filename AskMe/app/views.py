@@ -12,7 +12,7 @@ def paginate(objects_list, request, per_page=2):
 
 
 def new_questions(request):
-    questions_page = paginate(Question.objects1.all(), request)
+    questions_page = paginate(Question.objects.all(), request)
     return render(request, 'new_questions.html', {
         'content': questions_page,
     })
@@ -23,8 +23,8 @@ def create_ask(request):
 
 
 def question_page(request, pk):
-    question = Question.objects1.get(id=pk)
-    answers_page = paginate(Answer.objects1.by_question(pk), request, 1)
+    question = Question.objects.get(id=pk)
+    answers_page = paginate(Answer.objects.by_question(pk), request, 1)
     return render(request, 'question.html', {
         'question': question,
         'content': answers_page,
@@ -32,14 +32,14 @@ def question_page(request, pk):
 
 
 def hot_questions(request):
-    questions_page = paginate(Question.objects1.all(), request)
+    questions_page = paginate(Question.objects.all(), request)
     return render(request, 'hot_questions.html', {
         'content': questions_page,
     })
 
 
 def questions_by_tag(request, tag):
-    questions_page = paginate(Question.objects1.by_tag(tag), request)
+    questions_page = paginate(Question.objects.by_tag(tag), request)
     return render(request, 'questions_by_tag.html', {
         'content': questions_page,
         'tag': tag,

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from app.models import Profile, Question, Answer, Tag
-from random import sample
+from app.models import Profile, Question, Answer, Tag, LikeQuestion, LikeAnswer
+from random import choice, sample
 from faker import Faker
 
 f = Faker()
@@ -15,24 +15,26 @@ class Command(BaseCommand):
         parser.add_argument('--questions', nargs='+', type=int)
         parser.add_argument('--answers', nargs='+', type=int)
         parser.add_argument('--tags', nargs='+', type=int)
+        parser.add_argument('--likes', nargs='+', type=int)
 
         parser.add_argument('--db_size', nargs='+', type=str)
 
     def handle(self, *args, **options):
-        # try:
-        #     self.fill_profile(options['users'][0])
-        # except Profile.DoesNotExist:
-        #     raise CommandError('Users does not exist')
+        if options['users']:
+            self.fill_profile(options['users'][0])
 
-        # try:
-        #     self.fill_tag(options['tags'][0])
-        # except Tag.DoesNotExist:
-        #     raise CommandError('Users does not exist')
+        if options['tags']:
+            self.fill_tag(options['tags'][0])
 
-        try:
+        if options['questions']:
             self.fill_questions(options['questions'][0])
-        except Question.DoesNotExist:
-            raise CommandError('Users does not exist')
+
+        if options['answers']:
+            self.fill_answers(options['answers'][0])
+
+        if options['likes']:
+            self.fill_likes_questions(options['likes'][0])
+            self.fill_likes_answers(options['likes'][0])
 
         self.stdout.write(self.style.SUCCESS('Successfully closed poll '))
 
@@ -57,28 +59,59 @@ class Command(BaseCommand):
 
     @staticmethod
     def fill_questions(cnt):
-        profile_count = Profile.objects.count() - 1
-        for i in range(cnt):
-            q = Question.objects1.create(
-                profile_id=Profile.objects.get(id=i+1),#f.random_int(min=1, max=profile_count)),
+        for profile in Profile.objects.all():
+            q = Question.objects.create(
+                profile_id=profile,
                 title=f.sentence(),
                 text=f.text(),
-                # tags=Tag.objects.filter(id__in=sample(list(Tag.objects.all()), k=f.random_int(min=1, max=3))),
             )
             q.tags.set(Tag.objects.create_question()),
 
-    # @staticmethod
-    # def fill_profile(cnt):
-    #     user_ids = list(
-    #         User.objects.values_list(
-    #             'id', flat=True
-    #         )
-    #     )
-    #     print(user_ids)
-    #     print(User.objects.all())
-    #     v = Profile.objects.count() + 1
-    #     for i in range(cnt):
-    #         Profile.objects.create(
-    #             user_id=choice(user_ids),  #User.objects.get(id=i+1)+v, #user_ids[i], #
-    #             avatar="img/ava" + str(i % 7) + ".png",
-    #         )
+    @staticmethod
+    def fill_answers(cnt):
+        profile_ids = list(
+            Profile.objects.values_list(
+                'id', flat=True
+            )
+        )
+        question_ids = list(
+            Question.objects.values_list(
+                'id', flat=True
+            )
+        )
+        for i in range(cnt):
+            Answer.objects.create(
+                profile_id=Profile.objects.get(pk=choice(profile_ids)),
+                question_id=Question.objects.get(pk=choice(question_ids)),
+                text=f.text(),
+            )
+
+    @staticmethod
+    def fill_likes_questions(cnt):
+        count = 0
+        for question in Question.objects.all():
+            for profile in Profile.objects.sample_profile(f.random_int(min=0, max=10)):
+                LikeQuestion.objects.create(
+                    question_id=question,
+                    profile_id=profile,
+                )
+                count += 1
+                if count == cnt:
+                    break
+            if count == cnt:
+                break
+
+    @staticmethod
+    def fill_likes_answers(cnt):
+        count = 0
+        for answer in Answer.objects.all():
+            for profile in Profile.objects.sample_profile(f.random_int(min=0, max=15)):
+                LikeAnswer.objects.create(
+                    answer_id=answer,
+                    profile_id=profile,
+                )
+                count += 1
+                if count == cnt:
+                    break
+            if count == cnt:
+                break
