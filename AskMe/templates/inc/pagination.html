@@ -2,7 +2,7 @@
 	<ul class="pagination">
 		{% if content.has_previous %}
 			<li class="mx-2 shadow page-item">
-				<a class="page-link border border-dark rounded-0" href="?page={{ content.previous_page_number }}" aria-label="Previous">
+				<a class="page-link border border-dark rounded-0" href="?page=1" aria-label="Previous">
 					<span aria-hidden="true">&laquo;</span>
 				</a>
 			</li>
@@ -28,7 +28,7 @@
 
 		{% if content.has_next %}
 			<li class="mx-2 shadow page-item">
-				<a class="page-link border border-dark rounded-0" href="?page={{ content.next_page_number }}" aria-label="Next">
+				<a class="page-link border border-dark rounded-0" href="?page={{ content.paginator.num_pages }}" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
 			</li>
