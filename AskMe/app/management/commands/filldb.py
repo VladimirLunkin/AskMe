@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from app.models import Profile, Question, Answer, Tag, LikeQuestion, LikeAnswer
-from random import choice, sample
+from random import choice
 from faker import Faker
 
 f = Faker()
@@ -34,9 +34,9 @@ class Command(BaseCommand):
 
         if options['likes']:
             self.fill_likes_questions(options['likes'][0])
-            self.fill_likes_answers(options['likes'][0])
+            self.fill_likes_answers(5 * options['likes'][0])
 
-        self.stdout.write(self.style.SUCCESS('Successfully closed poll '))
+        self.stdout.write(self.style.SUCCESS('Data creation was successful'))
 
     @staticmethod
     def fill_profile(cnt):
