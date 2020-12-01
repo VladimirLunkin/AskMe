@@ -51,8 +51,14 @@ class Tag(models.Model):
 
 
 class QuestionManager(models.Manager):
+    def all(self):
+        return self.order_by('-date_create')
+
     def by_tag(self, tag):
-        return self.filter(tags__tag=tag)
+        return self.filter(tags__tag=tag).order_by('-date_create')
+
+    def hot(self):
+        return self.order_by('-like', '-date_create')
 
 
 class Question(models.Model):
@@ -76,7 +82,7 @@ class Question(models.Model):
 
 class AnswerManager(models.Manager):
     def by_question(self, pk):
-        return self.filter(question_id=pk)
+        return self.filter(question_id=pk).order_by('-like', 'date_create')
 
 
 class Answer(models.Model):

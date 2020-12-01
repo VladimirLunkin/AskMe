@@ -42,10 +42,10 @@ class Command(BaseCommand):
     def fill_profile(cnt):
         for i in range(cnt):
             Profile.objects.create(
-                user_id=User.objects.create(
+                user_id=User.objects.create_user(
                     username=f.user_name(),
                     email=f.email(),
-                    password=1
+                    password="1"
                 ),
                 avatar="img/ava" + str(i % 7) + ".png",
             )

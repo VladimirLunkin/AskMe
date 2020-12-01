@@ -1,10 +1,6 @@
 {% extends 'inc/base.html' %}
 {% load static %}
 
-{% block navbar %}
-    {% include 'inc/navbar_user.html' %}
-{% endblock navbar %}
-
 {% block heading %}
 <a class="col-3 h3 text-dark" href="{% url 'hot_questions' %}">Hot Questions</a>
 <a class="my-auto" href="{% url 'new_questions' %}"><u>New Questions</u></a>

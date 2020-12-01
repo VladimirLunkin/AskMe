@@ -1,3 +1,4 @@
+{% if content.paginator.num_pages > 1 %}
 <nav aria-label="..." class="mt-4">
 	<ul class="pagination">
 		{% if content.has_previous %}
@@ -41,3 +42,4 @@
 		{% endif %}
 	</ul>
 </nav>
+{% endif %}
