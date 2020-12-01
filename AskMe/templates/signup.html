@@ -11,19 +11,13 @@
     <div class="form-group row mt-2">
         <label for="id_username" class="col-sm-3 col-form-label">Login</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" id="id_username" name="username" placeholder="dr_pepper" required>
+            <input type="text" class="form-control" id="id_username" name="username" required>
         </div>
     </div>
     <div class="form-group row mt-2">
         <label for="id_email" class="col-sm-3 col-form-label">Email</label>
         <div class="col-sm-9">
-            <input type="email" class="form-control" id="id_email" name="email" placeholder="dr.pepper@mail.ru" required>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="id_NickName" class="col-sm-3 col-form-label">NickName</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="id_NickName" name="q" placeholder="Dr. Pepper">
+            <input type="email" class="form-control" id="id_email" name="email" required>
         </div>
     </div>
     <div class="form-group row">
@@ -33,7 +27,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="id_password_check" class="col-sm-3 col-form-label">Repeat password</label>
+        <label class="col-sm-3 col-form-label">Repeat password</label>
         <div class="col-sm-9">
             <input type="password" class="form-control" id="id_password_check" name="password_check" required>
         </div>
@@ -47,6 +41,9 @@
             </div>
         </div>
     </div>
+    {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+    {% endif %}
     <div class="form-group row">
         <div class="col-sm-3"></div>
         <div class="col-sm-9">

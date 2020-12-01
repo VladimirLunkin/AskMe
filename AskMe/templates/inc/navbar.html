@@ -27,9 +27,9 @@
         {% else %}
         <div class="mr-md-0 d-flex mt-md-2" style="margin-right: 400px; width: 182.54px">
             <div class="d-flex justify-content-start mx-auto">
-                <a href="{% url 'login' %}"><u>log in</u></a>
+                <a href="{% url 'login' %}?next={{ request.get_full_path }}"><u>log in</u></a>
                 &nbsp;&nbsp;&nbsp;
-                <a href="{% url 'signup' %}"><u>register</u></a>
+                <a href="{% url 'signup' %}?next={{ request.get_full_path }}"><u>register</u></a>
             </div>
         </div>
         {% endif %}

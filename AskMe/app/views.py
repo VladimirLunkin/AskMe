@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from app.models import Question, Answer, Tag, Profile
 from django.contrib.auth.models import User
-from app.forms import LoginForm, AskForm, TagForm, AnswerForm, SignupForm
+from app.forms import LoginForm, AskForm, TagForm, AnswerForm, SignupForm, SettingsForm
 
 
 def paginate(objects_list, request, per_page=2):
@@ -35,8 +35,7 @@ def create_ask(request):
 
             tags = tag_form.cleaned_data.get('tags').split()
             if len(tags) > 3 or len(tags) == 0:
-                print(tags)
-                # обработка ошибки
+                ask_form.add_error(None, 'Max 3 tags!')
             else:
                 for _tag in tags:
                     if not Tag.objects.filter(tag=_tag).exists():
@@ -50,10 +49,9 @@ def create_ask(request):
 def question_page(request, pk):
     question = Question.objects.get(id=pk)
     answers_page = paginate(Answer.objects.by_question(pk), request, 1)
-
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            return redirect(login_view)
+            return redirect(f"/login/?next={request.get_full_path()}")
 
         form = AnswerForm(data=request.POST)
         if form.is_valid():
@@ -62,8 +60,8 @@ def question_page(request, pk):
             answer.question_id = question
             answer.save()
             answers_page = paginate(Answer.objects.by_question(pk), request, 1)
-            #return redirect(reverse('question', kwargs={'pk': question.pk}) + f"?page={answers_page.paginator.num_pages}")
-            return redirect(f"/question/{pk}/?page={answers_page.paginator.num_pages}")
+            return redirect(reverse('question', kwargs={'pk': pk}) + f"?page={answers_page.paginator.num_pages}")
+
     return render(request, 'question.html', {
         'question': question,
         'content': answers_page,
@@ -85,7 +83,42 @@ def questions_by_tag(request, tag):
     })
 
 
+@login_required
 def settings(request):
+    if request.method == 'POST':
+        form = SettingsForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            password_check = form.cleaned_data.get('password_check')
+            avatar = form.cleaned_data.get('avatar')
+
+            current_user = request.user
+            if username is not None and current_user.username != username:
+                if not User.objects.filter(username=username).exists():
+                    current_user.username = username
+                else:
+                    form.add_error("This username is already in use")
+
+            if email is not None and current_user.email != email:
+                if not User.objects.filter(email=email).exists():
+                    current_user.email = email
+                else:
+                    form.add_error("This email is already in use")
+
+            if password is not None and password_check is not None:
+                if password == password_check:
+                    current_user.set_password(password)
+                    login(request, current_user)
+                else:
+                    form.add_error("Passwords do not match")
+
+            if avatar is not None:
+                current_user.profile.avatar = avatar
+
+            current_user.save()
+
     return render(request, 'settings.html', {})
 
 
@@ -102,13 +135,19 @@ def login_view(request):
     return render(request, 'login.html', {})
 
 
+@login_required
 def logout_view(request):
     logout(request)
-    return redirect(signup)
+    previous_page = request.META.get('HTTP_REFERER')
+    if previous_page is not None:
+        return redirect(previous_page)
+    return redirect("/")
 
 
 def signup(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        form = SignupForm()
+    else:
         form = SignupForm(data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -128,5 +167,4 @@ def signup(request):
                 if 'next' in request.POST:
                     return redirect(request.POST.get('next'))
                 return redirect('/')
-
-    return render(request, 'signup.html', {})
+    return render(request, 'signup.html', {'form': form})

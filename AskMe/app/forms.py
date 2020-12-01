@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, TextInput, DateTimeInput, Textarea
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from app.models import Question, Answer, Tag, Profile
@@ -33,3 +33,11 @@ class SignupForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
+
+
+class SettingsForm(forms.Form):
+    username = forms.CharField(required=False)
+    email = forms.CharField(required=False)
+    password = forms.CharField(required=False)
+    password_check = forms.CharField(required=False)
+    avatar = forms.ImageField(required=False)
