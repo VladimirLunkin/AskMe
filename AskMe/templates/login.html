@@ -34,7 +34,7 @@
                 {% endbuttons %}
             </div>
             <div class="flex-row">
-                <a href="{% url 'signup' %}?next={{ request.get_full_path }}" class=""><u>create new account</u></a>
+                <a href="{% url 'signup' %}?next={{ request.GET.next }}" class=""><u>create new account</u></a>
             </div>
         </div>
     </div>
