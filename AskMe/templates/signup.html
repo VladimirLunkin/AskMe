@@ -1,55 +1,49 @@
 {% extends 'inc/base.html' %}
 {% load static %}
 
-{% block navbar %}
-    {% include 'inc/navbar.html' %}
-{% endblock navbar %}
-
 {% block heading %}
 <h3>Registration</h3>
 {% endblock heading %}
 
 {% block content %}
-<form>
+<form method="post" novalidate>
+    {% csrf_token %}
     <div class="form-group row mt-2">
-        <label for="inputLogin" class="col-sm-3 col-form-label">Login</label>
+        <label for="id_username" class="col-sm-3 col-form-label">Login</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" id="inputLogin" placeholder="dr_pepper" required>
+            <input type="text" class="form-control" id="id_username" name="username" required>
         </div>
     </div>
     <div class="form-group row mt-2">
-        <label for="inputEmail" class="col-sm-3 col-form-label">Email</label>
+        <label for="id_email" class="col-sm-3 col-form-label">Email</label>
         <div class="col-sm-9">
-            <input type="email" class="form-control" id="inputEmail" placeholder="dr.pepper@mail.ru" required>
+            <input type="email" class="form-control" id="id_email" name="email" required>
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputNickName" class="col-sm-3 col-form-label">NickName</label>
+        <label for="id_password" class="col-sm-3 col-form-label">Password</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" id="inputNickName" placeholder="Dr. Pepper" required>
+            <input type="password" class="form-control" id="id_password" name="password" required>
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
+        <label class="col-sm-3 col-form-label">Repeat password</label>
         <div class="col-sm-9">
-            <input type="password" class="form-control" id="inputPassword" required>
+            <input type="password" class="form-control" id="id_password_check" name="password_check" required>
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputRepeatPassword" class="col-sm-3 col-form-label">Repeat password</label>
-        <div class="col-sm-9">
-            <input type="password" class="form-control" id="inputRepeatPassword" required>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="" class="col-sm-3 col-form-label">Upload avatar</label>
+        <label for="id_avatar" class="col-sm-3 col-form-label">Upload avatar</label>
         <div class="col-sm-5">
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-                <label class="custom-file-label" for="validatedCustomFile" data-browse="choose">c:\avatar.jpg</label>
+                <input type="file" class="custom-file-input" id="id_avatar" name="avatar">
+                <label class="custom-file-label" for="id_avatar" data-browse="choose">c:\avatar.jpg</label>
             </div>
         </div>
     </div>
+    {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+    {% endif %}
     <div class="form-group row">
         <div class="col-sm-3"></div>
         <div class="col-sm-9">

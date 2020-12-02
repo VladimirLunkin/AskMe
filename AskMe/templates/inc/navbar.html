@@ -8,14 +8,33 @@
             </div>
             <a class="flex-fill btn btn-outline-success my-2 my-md-0" type="submit" href="{% url 'create_ask' %}">ASK!</a>
         </form>
-        {% block user %}
-        <div class="mr-md-0 d-flex mt-md-2" style="margin-right: 400px; width: 182.54px">
-            <div class="d-flex justify-content-start mx-auto">
-                <a href="{% url 'login' %}"><u>log in</u></a>
-                &nbsp;&nbsp;&nbsp;
-                <a href="{% url 'signup' %}"><u>register</u></a>
+        {% if request.user.is_authenticated %}
+        <div class="mr-md-0 d-flex mt-md-2" style="margin-right: 200px">
+            <div class="row mx-2">
+                <img src="{% static request.user.profile.avatar %}" class="avatar-img rounded">
+            </div>
+            <div class="d-flex flex-column bd-highlight mb-2">
+                <div>
+                    <a href="#" class="h5 text-light bg-dark">{{ request.user.username }}</a>
+                </div>
+                <div class="d-flex justify-content-start">
+                    <a href="{% url 'settings' %}"><u>settings</u></a>&nbsp;&nbsp;&nbsp;
+                    <a href="{% url 'logout' %}"><u>log out</u></a>
+                </div>
             </div>
         </div>
-        {% endblock user %}
+        {% else %}
+        <div class="mr-md-0 d-flex mt-md-2" style="margin-right: 400px; width: 182.54px">
+            <div class="d-flex justify-content-start mx-auto">
+                {% if request.path == '/login/' or request.path == '/signup/' %}
+                    <a href="{% url 'login' %}?next={{ request.GET.next }}"><u>log in</u></a>&nbsp;&nbsp;&nbsp;
+                    <a href="{% url 'signup' %}?next={{ request.GET.next }}"><u>register</u></a>
+                {% else %}
+                    <a href="{% url 'login' %}?next={{ request.get_full_path }}"><u>log in</u></a>&nbsp;&nbsp;&nbsp;
+                    <a href="{% url 'signup' %}?next={{ request.get_full_path }}"><u>register</u></a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
     </nav>
 </header>

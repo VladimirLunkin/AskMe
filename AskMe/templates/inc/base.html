@@ -9,8 +9,7 @@
 	<link href="{% static "css/my.css" %}" rel="stylesheet">
 </head>
 <body>
-	{% block navbar %}
-	{% endblock navbar %}
+	{% include 'inc/navbar.html' %}
 
 	<main role="main">
 		<div class="container mt-5">
@@ -31,8 +30,8 @@
 	</main>
 
 	{% include 'inc/footer.html' %}
-	<script src="js/jquery.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="js/bootstrap.js"></script>
+<!--	<script src="/js/jquery.min.js"></script>-->
+<!--	<script src="/js/popper.min.js"></script>-->
+<!--	<script src="/js/bootstrap.js"></script>-->
 </body>
 </html>
