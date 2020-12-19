@@ -9,8 +9,8 @@ from django.contrib.auth.models import User
 from app.forms import LoginForm, AskForm, TagForm, AnswerForm, SignupForm, SettingsForm
 
 
-def paginate(objects_list, request, per_page=2):
-    paginator = Paginator(objects_list, per_page)
+def paginate(objects_list, request, limit=2):
+    paginator = Paginator(objects_list, limit)
     page_num = request.GET.get('page')
 
     return paginator.get_page(page_num)
