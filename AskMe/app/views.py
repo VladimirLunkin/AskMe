@@ -25,23 +25,29 @@ def new_questions(request):
 
 @login_required
 def create_ask(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        ask_form = AskForm()
+    else:
         ask_form = AskForm(request.user.profile, data=request.POST)
         if ask_form.is_valid():
             question = ask_form.save()
             return redirect(reverse('question', kwargs={'pk': question.pk}))
-    return render(request, 'create_ask.html', {})
+    return render(request, 'create_ask.html',{
+        'ask_form': ask_form,
+    })
 
 
 def question_page(request, pk):
     question = Question.objects.get(id=pk)
     answers_page = paginate(Answer.objects.by_question(pk), request, limit=1)
 
-    if request.method == 'POST':
+    if request.method == 'GET':
+        answer_form = AnswerForm()
+    else:
         if not request.user.is_authenticated:
             return redirect(f"/login/?next={request.get_full_path()}")
 
-        answer_form = AnswerForm(request.user.profile, question, data=request.POST)
+        answer_form = AnswerForm(profile_id=request.user.profile, question_id=question, data=request.POST)
         if answer_form.is_valid():
             answer_form.save()
             answers_page = paginate(Answer.objects.by_question(pk), request, limit=1)
@@ -50,6 +56,7 @@ def question_page(request, pk):
     return render(request, 'question.html', {
         'question': question,
         'content': answers_page,
+        'answer_form': answer_form,
     })
 
 
@@ -70,52 +77,31 @@ def questions_by_tag(request, tag):
 
 @login_required
 def settings(request):
-    if request.method == 'POST':
-        form = SettingsForm(data=request.POST)
+    if request.method == 'GET':
+        form = SettingsForm()
+    else:
+        form = SettingsForm(user=request.user, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
-            password_check = form.cleaned_data.get('password_check')
-            avatar = form.cleaned_data.get('avatar')
-
-            current_user = request.user
-            if username is not None and current_user.username != username:
-                if not User.objects.filter(username=username).exists():
-                    current_user.username = username
-                else:
-                    form.add_error("This username is already in use")
-
-            if email is not None and current_user.email != email:
-                if not User.objects.filter(email=email).exists():
-                    current_user.email = email
-                else:
-                    form.add_error("This email is already in use")
-
-            if password is not None and password_check is not None:
-                if password == password_check:
-                    current_user.set_password(password)
-                    login(request, current_user)
-                else:
-                    form.add_error("Passwords do not match")
-
-            if avatar is not None:
-                current_user.profile.avatar = avatar
-
-            current_user.save()
-
-    return render(request, 'settings.html', {})
+            user = form.save()
+            login(request, user)
+    return render(request, 'settings.html', {
+        'form': form,
+    })
 
 
 def login_view(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        form = LoginForm()
+    else:
         form = LoginForm(data=request.POST)
         if form.is_valid():
             profile = authenticate(request, **form.cleaned_data)
             if profile is not None:
                 login(request, profile)
                 return redirect(request.POST.get('next', '/'))
-    return render(request, 'login.html', {})
+    return render(request, 'login.html', {
+        'form': form,
+    })
 
 
 @login_required
@@ -133,21 +119,9 @@ def signup(request):
     else:
         form = SignupForm(data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
-            password_check = form.cleaned_data.get('password_check')
-            avatar = form.cleaned_data.get('avatar')
-            if avatar is None:
-                avatar = "img/no_avatar.png"
-
-            if password != password_check:
-                form.add_error(None, 'Passwords do not match!')
-            else:
-                user = User.objects.create_user(username, email, password)
-                Profile.objects.create(user_id=user, avatar=avatar)
-                login(request, user)
-                return redirect(request.POST.get('next', '/'))
+            user = form.save()
+            login(request, user)
+            return redirect(request.POST.get('next', '/'))
     return render(request, 'signup.html', {
         'form': form,
     })

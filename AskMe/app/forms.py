@@ -17,7 +17,7 @@ class AskForm(forms.ModelForm):
         model = Question
         fields = ['title', 'text']
 
-    def __init__(self, profile_id, **kwargs):
+    def __init__(self, profile_id=None, **kwargs):
         self._profile_id = profile_id
         super(AskForm, self).__init__(**kwargs)
 
@@ -47,7 +47,7 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         fields = ['text']
 
-    def __init__(self, profile_id, question_id, **kwargs):
+    def __init__(self, profile_id=None, question_id=None, **kwargs):
         self._profile_id = profile_id
         self._question_id = question_id
         super(AnswerForm, self).__init__(**kwargs)
@@ -66,6 +66,24 @@ class SignupForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'password']
 
+    def clean(self):
+        if self.cleaned_data['password'] != self.cleaned_data['password_check']:
+            self.add_error(None, 'Passwords do not match!')
+            raise forms.ValidationError('Passwords do not match!')
+
+    def save(self, **kwargs):
+        username = self.cleaned_data['username']
+        email = self.cleaned_data['email']
+        password = self.cleaned_data['password']
+        user = User.objects.create_user(username, email, password)
+
+        Profile.objects.create(user_id=user)
+        avatar = self.cleaned_data['avatar']
+        if avatar is not None:
+            Profile.avatar.set(avatar)
+
+        return user
+
 
 class SettingsForm(forms.Form):
     username = forms.CharField(required=False)
@@ -73,3 +91,35 @@ class SettingsForm(forms.Form):
     password = forms.CharField(required=False)
     password_check = forms.CharField(required=False)
     avatar = forms.ImageField(required=False)
+
+    def __init__(self, user=None, **kwargs):
+        self.user = user
+        super(SettingsForm, self).__init__(**kwargs)
+
+    def clean(self):
+        if self.cleaned_data['username'] is not None and self.user.username != self.cleaned_data['username']:
+            if not User.objects.filter(username=self.cleaned_data['username']).exists():
+                self.add_error('This username is already in use')
+                raise forms.ValidationError('This username is already in use')
+
+        if self.cleaned_data['email'] is not None and self.user.email != self.cleaned_data['email']:
+            if not User.objects.filter(email=self.cleaned_data['email']).exists():
+                self.add_error('This email is already in use')
+                raise forms.ValidationError('This email is already in use')
+
+        if self.cleaned_data['password'] != self.cleaned_data['password_check']:
+            self.add_error(None, 'Passwords do not match!')
+            raise forms.ValidationError('Passwords do not match!')
+
+    def save(self, **kwargs):
+        self.user.username = self.cleaned_data['username']
+        self.user.email = self.cleaned_data['email']
+
+        self.user.set_password(self.cleaned_data['password'])
+
+        if self.cleaned_data['avatar'] is not None:
+            self.user.profile.avatar = self.cleaned_data['avatar']
+
+        self.user.save()
+
+        return self.user
