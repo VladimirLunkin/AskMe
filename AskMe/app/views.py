@@ -129,9 +129,7 @@ def login_view(request):
             profile = authenticate(request, **form.cleaned_data)
             if profile is not None:
                 login(request, profile)
-                if 'next' in request.POST:
-                    return redirect(request.POST.get('next'))
-                return redirect("/")
+                return redirect(request.POST.get('next', '/'))
     return render(request, 'login.html', {})
 
 
@@ -164,7 +162,5 @@ def signup(request):
                 user = User.objects.create_user(username, email, password)
                 Profile.objects.create(user_id=user, avatar=avatar)
                 login(request, user)
-                if 'next' in request.POST:
-                    return redirect(request.POST.get('next'))
-                return redirect('/')
+                return redirect(request.POST.get('next', '/'))
     return render(request, 'signup.html', {'form': form})
