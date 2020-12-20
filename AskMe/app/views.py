@@ -77,15 +77,18 @@ def questions_by_tag(request, tag):
 
 @login_required
 def settings(request):
+    form_updated = False
     if request.method == 'GET':
         form = SettingsForm()
     else:
         form = SettingsForm(user=request.user, data=request.POST)
         if form.is_valid():
             user = form.save()
+            form_updated = True
             login(request, user)
     return render(request, 'settings.html', {
         'form': form,
+        'form_updated': form_updated,
     })
 
 

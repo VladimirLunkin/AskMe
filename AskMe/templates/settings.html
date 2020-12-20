@@ -10,6 +10,12 @@
 <form method="post" novalidate>
     {% csrf_token %}
 
+    {% if form_updated %}
+        <div class="alert alert-success" role="alert">
+          Changes saved successfully!
+        </div>
+    {% endif %}
+
     <div class="form-group row mt-2">
         <label for="id_username" class="col-sm-3 col-form-label">Login</label>
         <div class="col-sm-9">
