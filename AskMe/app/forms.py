@@ -59,7 +59,7 @@ class AnswerForm(forms.ModelForm):
 
 
 class SignupForm(forms.ModelForm):
-    password_check = forms.CharField(required=True)
+    password2 = forms.CharField(required=True)
     avatar = forms.ImageField(required=False)
 
     class Meta:
@@ -67,9 +67,24 @@ class SignupForm(forms.ModelForm):
         fields = ['username', 'email', 'password']
 
     def clean(self):
-        if self.cleaned_data['password'] != self.cleaned_data['password_check']:
+        if not 'password' in self.cleaned_data or not 'password2' in self.cleaned_data:
+            self.add_error(None, 'Password is too short (minimum 1 characters)')
+            raise forms.ValidationError('Password is too short (minimum 1 characters)')
+        if self.cleaned_data['password'] != self.cleaned_data['password2']:
             self.add_error(None, 'Passwords do not match!')
             raise forms.ValidationError('Passwords do not match!')
+
+    def clean_username(self):
+        if User.objects.filter(username=self.cleaned_data['username']).exists():
+            self.add_error(None, 'This username is already in use')
+            raise forms.ValidationError('This username is already in use')
+        return self.cleaned_data['username']
+
+    def clean_email(self):
+        if User.objects.filter(email=self.cleaned_data['email']).exists():
+            self.add_error(None, 'This email is already in use')
+            raise forms.ValidationError('This email is already in use')
+        return self.cleaned_data['email']
 
     def save(self, **kwargs):
         username = self.cleaned_data['username']
@@ -85,31 +100,39 @@ class SignupForm(forms.ModelForm):
         return user
 
 
-class SettingsForm(forms.Form):
-    username = forms.CharField(required=False)
-    email = forms.CharField(required=False)
-    password = forms.CharField(required=False)
-    password_check = forms.CharField(required=False)
+class SettingsForm(forms.ModelForm):
+    password2 = forms.CharField(required=False)
     avatar = forms.ImageField(required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
 
     def __init__(self, user=None, **kwargs):
         self.user = user
         super(SettingsForm, self).__init__(**kwargs)
 
     def clean(self):
-        if self.cleaned_data['username'] is not None and self.user.username != self.cleaned_data['username']:
-            if not User.objects.filter(username=self.cleaned_data['username']).exists():
-                self.add_error('This username is already in use')
-                raise forms.ValidationError('This username is already in use')
-
-        if self.cleaned_data['email'] is not None and self.user.email != self.cleaned_data['email']:
-            if not User.objects.filter(email=self.cleaned_data['email']).exists():
-                self.add_error('This email is already in use')
-                raise forms.ValidationError('This email is already in use')
-
-        if self.cleaned_data['password'] != self.cleaned_data['password_check']:
+        if not 'password' in self.cleaned_data or not 'password2' in self.cleaned_data:
+            self.add_error(None, 'Password is too short (minimum 1 characters)')
+            raise forms.ValidationError('Password is too short (minimum 1 characters)')
+        if self.cleaned_data['password'] != self.cleaned_data['password2']:
             self.add_error(None, 'Passwords do not match!')
             raise forms.ValidationError('Passwords do not match!')
+
+    def clean_username(self):
+        if self.user.username != self.cleaned_data['username']:
+            if User.objects.filter(username=self.cleaned_data['username']).exists():
+                self.add_error(None, 'This username is already in use')
+                raise forms.ValidationError('This username is already in use')
+        return self.cleaned_data['username']
+
+    def clean_email(self):
+        if self.user.email != self.cleaned_data['email']:
+            if User.objects.filter(email=self.cleaned_data['email']).exists():
+                self.add_error(None, 'This email is already in use')
+                raise forms.ValidationError('This email is already in use')
+        return self.cleaned_data['email']
 
     def save(self, **kwargs):
         self.user.username = self.cleaned_data['username']
@@ -120,6 +143,7 @@ class SettingsForm(forms.Form):
         if self.cleaned_data['avatar'] is not None:
             self.user.profile.avatar = self.cleaned_data['avatar']
 
+        print(self.user)
         self.user.save()
 
         return self.user
