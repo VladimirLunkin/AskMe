@@ -1,21 +1,48 @@
 from django import forms
-from django.forms import ModelForm, TextInput, DateTimeInput, Textarea
+from django.forms import ModelForm, TextInput, PasswordInput, DateTimeInput, Textarea, FileInput
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from app.models import Question, Answer, Tag, Profile
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(required=True)
-    password = forms.CharField(required=True)
+    username = forms.CharField(required=True,
+                               widget=TextInput(attrs={
+                                   'class': 'form-control',
+                               }),
+                               label='Login')
+    password = forms.CharField(required=True,
+                               widget=PasswordInput(attrs={
+                                   'class': 'form-control',
+                               }),
+                               label='Password')
 
 
 class AskForm(forms.ModelForm):
-    tags = forms.CharField(required=False)
+    tags = forms.CharField(required=False,
+                           widget=forms.TextInput(attrs={
+                               'class': 'form-control',
+                           }),
+                           label='Tags')
 
     class Meta:
         model = Question
         fields = ['title', 'text']
+
+        widgets = {
+            'title': TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'text': Textarea(attrs={
+                'class': 'form-control',
+                'rows': '7',
+            }),
+        }
+
+        labels = {
+            'title': 'Title',
+            'text': 'Text',
+        }
 
     def __init__(self, profile_id=None, **kwargs):
         self._profile_id = profile_id
@@ -47,6 +74,18 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         fields = ['text']
 
+        widgets = {
+            'text': Textarea(attrs={
+                'class': 'form-control',
+                'rows': '2',
+                'placeholder': 'Enter your answer here...'
+            }),
+        }
+
+        labels = {
+            'text': 'Text',
+        }
+
     def __init__(self, profile_id=None, question_id=None, **kwargs):
         self._profile_id = profile_id
         self._question_id = question_id
@@ -59,19 +98,43 @@ class AnswerForm(forms.ModelForm):
 
 
 class SignupForm(forms.ModelForm):
-    password2 = forms.CharField(required=True)
-    avatar = forms.ImageField(required=False)
+    password2 = forms.CharField(required=True,
+                               widget=PasswordInput(attrs={
+                                   'class': 'form-control',
+                               }),
+                               label='Password check')
+    avatar = forms.ImageField(required=False,
+                               widget=FileInput(attrs={
+                                   'class': 'custom-file',
+                               }),
+                               label='Avatar')
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
 
+        widgets = {
+            'username': TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'email': TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'password': PasswordInput(attrs={
+                'class': 'form-control',
+            }),
+        }
+
+        labels = {
+            'username': 'Login',
+        }
+
     def clean(self):
         if not 'password' in self.cleaned_data or not 'password2' in self.cleaned_data:
-            self.add_error(None, 'Password is too short (minimum 1 characters)')
             raise forms.ValidationError('Password is too short (minimum 1 characters)')
         if self.cleaned_data['password'] != self.cleaned_data['password2']:
-            self.add_error(None, 'Passwords do not match!')
+            self.add_error('password', 'Passwords do not match!')
+            self.add_error('password2', 'Passwords do not match!')
             raise forms.ValidationError('Passwords do not match!')
 
     def clean_username(self):
@@ -101,12 +164,36 @@ class SignupForm(forms.ModelForm):
 
 
 class SettingsForm(forms.ModelForm):
-    password2 = forms.CharField(required=False)
-    avatar = forms.ImageField(required=False)
+    password2 = forms.CharField(required=True,
+                                widget=PasswordInput(attrs={
+                                    'class': 'form-control',
+                                }),
+                                label='Password check')
+    avatar = forms.ImageField(required=False,
+                              widget=FileInput(attrs={
+                                  'class': 'custom-file',
+                              }),
+                              label='Avatar')
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
+
+        widgets = {
+            'username': TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'email': TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'password': PasswordInput(attrs={
+                'class': 'form-control',
+            }),
+        }
+
+        labels = {
+            'username': 'Login',
+        }
 
     def __init__(self, user=None, **kwargs):
         self.user = user
@@ -114,10 +201,10 @@ class SettingsForm(forms.ModelForm):
 
     def clean(self):
         if not 'password' in self.cleaned_data or not 'password2' in self.cleaned_data:
-            self.add_error(None, 'Password is too short (minimum 1 characters)')
             raise forms.ValidationError('Password is too short (minimum 1 characters)')
         if self.cleaned_data['password'] != self.cleaned_data['password2']:
-            self.add_error(None, 'Passwords do not match!')
+            self.add_error('password', 'Passwords do not match!')
+            self.add_error('password2', 'Passwords do not match!')
             raise forms.ValidationError('Passwords do not match!')
 
     def clean_username(self):
@@ -143,7 +230,6 @@ class SettingsForm(forms.ModelForm):
         if self.cleaned_data['avatar'] is not None:
             self.user.profile.avatar = self.cleaned_data['avatar']
 
-        print(self.user)
         self.user.save()
 
         return self.user

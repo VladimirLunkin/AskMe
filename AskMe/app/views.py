@@ -26,14 +26,14 @@ def new_questions(request):
 @login_required
 def create_ask(request):
     if request.method == 'GET':
-        ask_form = AskForm()
+        form = AskForm()
     else:
-        ask_form = AskForm(request.user.profile, data=request.POST)
-        if ask_form.is_valid():
-            question = ask_form.save()
+        form = AskForm(request.user.profile, data=request.POST)
+        if form.is_valid():
+            question = form.save()
             return redirect(reverse('question', kwargs={'pk': question.pk}))
     return render(request, 'create_ask.html',{
-        'ask_form': ask_form,
+        'form': form,
     })
 
 
@@ -42,21 +42,21 @@ def question_page(request, pk):
     answers_page = paginate(Answer.objects.by_question(pk), request, limit=1)
 
     if request.method == 'GET':
-        answer_form = AnswerForm()
+        form = AnswerForm()
     else:
         if not request.user.is_authenticated:
             return redirect(f"/login/?next={request.get_full_path()}")
 
-        answer_form = AnswerForm(profile_id=request.user.profile, question_id=question, data=request.POST)
-        if answer_form.is_valid():
-            answer_form.save()
+        form = AnswerForm(profile_id=request.user.profile, question_id=question, data=request.POST)
+        if form.is_valid():
+            form.save()
             answers_page = paginate(Answer.objects.by_question(pk), request, limit=1)
             return redirect(reverse('question', kwargs={'pk': pk}) + f"?page={answers_page.paginator.num_pages}")
 
     return render(request, 'question.html', {
         'question': question,
         'content': answers_page,
-        'answer_form': answer_form,
+        'form': form,
     })
 
 

@@ -39,7 +39,7 @@
     {% csrf_token %}
 	{% if request.user.is_authenticated %}
 	<div class="row mt-3">
-        <textarea id="id_text" name="text" class="form-control" rows="2" placeholder="Enter your answer here..."></textarea>
+		{{ form.text }}
     </div>
 	{% endif %}
     <div class="row my-2">

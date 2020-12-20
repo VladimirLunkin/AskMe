@@ -14,8 +14,8 @@ class ProfileManager(models.Manager):
 
 
 class Profile(models.Model):
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    avatar = models.ImageField(default='img/no_avatar.png')
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True, verbose_name='Профиль')
+    avatar = models.ImageField(default='img/no_avatar.png', verbose_name='Аватар')
 
     objects = ProfileManager()
 
@@ -62,13 +62,13 @@ class QuestionManager(models.Manager):
 
 
 class Question(models.Model):
-    profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Автор')
     title = models.CharField(max_length=1024, verbose_name='Заголовок')
-    text = models.TextField(verbose_name='Текст')
-    tags = models.ManyToManyField(Tag)
+    text = models.TextField(verbose_name='Текст вопроса')
+    tags = models.ManyToManyField(Tag, verbose_name='Теги')
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
-    like = models.IntegerField(default=0)
-    number_of_answers = models.IntegerField(default=0)
+    like = models.IntegerField(default=0, verbose_name='Лайки')
+    number_of_answers = models.IntegerField(default=0, verbose_name='Количество ответов')
 
     objects = QuestionManager()
 
@@ -86,12 +86,12 @@ class AnswerManager(models.Manager):
 
 
 class Answer(models.Model):
-    profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    question_id = models.ForeignKey('Question', on_delete=models.CASCADE)
-    text = models.TextField(verbose_name='Текст')
+    profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Автор')
+    question_id = models.ForeignKey('Question', on_delete=models.CASCADE, verbose_name='Вопрос')
+    text = models.TextField(verbose_name='Текст ответа')
     is_correct = models.BooleanField(default=False, verbose_name='Чекбокс')
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
-    like = models.IntegerField(default=0)
+    like = models.IntegerField(default=0, verbose_name='Лайки')
 
     objects = AnswerManager()
 
@@ -115,8 +115,8 @@ class Answer(models.Model):
 
 
 class LikeQuestion(models.Model):
-    question_id = models.ForeignKey('Question', on_delete=models.CASCADE)
-    profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    question_id = models.ForeignKey('Question', on_delete=models.CASCADE, verbose_name='Вопрос')
+    profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Профиль')
     is_like = models.BooleanField(default=True, verbose_name='Лайк или дизлайк')
 
     def __str__(self):
@@ -146,8 +146,8 @@ class LikeQuestion(models.Model):
 
 
 class LikeAnswer(models.Model):
-    answer_id = models.ForeignKey('Answer', on_delete=models.CASCADE)
-    profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE)
+    answer_id = models.ForeignKey('Answer', on_delete=models.CASCADE, verbose_name='Ответ')
+    profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Профиль')
     is_like = models.BooleanField(default=True, verbose_name='Лайк или дизлайк')
 
     def __str__(self):
