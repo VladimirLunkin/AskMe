@@ -89,7 +89,7 @@ class Answer(models.Model):
     profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Автор')
     question_id = models.ForeignKey('Question', on_delete=models.CASCADE, verbose_name='Вопрос')
     text = models.TextField(verbose_name='Текст ответа')
-    is_correct = models.BooleanField(default=False, verbose_name='Чекбокс')
+    is_correct = models.BooleanField(default=False, verbose_name='Корректность ответа')
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
     like = models.IntegerField(default=0, verbose_name='Лайки')
 
