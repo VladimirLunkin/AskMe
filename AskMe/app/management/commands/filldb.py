@@ -84,6 +84,7 @@ class Command(BaseCommand):
                 profile_id=Profile.objects.get(pk=choice(profile_ids)),
                 question_id=Question.objects.get(pk=choice(question_ids)),
                 text=f.text(),
+                is_correct=f.random_int(min=0, max=1),
             )
 
     @staticmethod

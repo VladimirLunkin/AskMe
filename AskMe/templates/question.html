@@ -6,10 +6,7 @@
 <div class="row media d-flex flex-wrap">
 	<div class="d-flex px-1 mr-4 flex-column">
 		<img src="{% static question.profile_id.avatar %}" class="question-img mb-2" alt="...">
-		<div class="btn-group" role="group" aria-label="">
-			<button type="button" class="btn btn-outline-dark">&#9757;</button>
-			<span class="btn btn-outline-dark">{{ question.like }}</span>
-		</div>
+		{% include 'inc/like.html' with like=question.like %}
 	</div>
 	<div class="media-body">
 		<h5 class="mt-0"><u>{{ question.title }}</u></h5>
