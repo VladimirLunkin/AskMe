@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm, TextInput, PasswordInput, DateTimeInput, Textarea, FileInput
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from app.models import Question, Answer, Tag, Profile
+from app.models import *
 
 
 class LoginForm(forms.Form):
@@ -233,3 +233,47 @@ class SettingsForm(forms.ModelForm):
         self.user.save()
 
         return self.user
+
+
+class LikeQuestionForm:
+    def __init__(self, user, question, is_like):
+        self.user = user
+        self.question = Question.objects.get(id=question)
+        self.is_like = is_like
+
+    def save(self):
+        if not LikeQuestion.objects.filter(question_id=self.question, profile_id=self.user).exists():
+            like = LikeQuestion(question_id=self.question,
+                                profile_id=self.user,
+                                is_like=self.is_like)
+            rating = like.save()
+        else:
+            like = LikeQuestion.objects.get(question_id=self.question, profile_id=self.user)
+            if self.is_like == like.is_like:
+                rating = like.delete()
+            else:
+                rating = like.change_mind()
+
+        return rating
+
+
+class LikeAnswerForm:
+    def __init__(self, user, answer, is_like):
+        self.user = user
+        self.answer = Answer.objects.get(id=answer)
+        self.is_like = is_like
+
+    def save(self):
+        if not LikeAnswer.objects.filter(answer_id=self.answer, profile_id=self.user).exists():
+            like = LikeAnswer(answer_id=self.answer,
+                              profile_id=self.user,
+                              is_like=self.is_like)
+            rating = like.save()
+        else:
+            like = LikeAnswer.objects.get(answer_id=self.answer, profile_id=self.user)
+            if self.is_like == like.is_like:
+                rating = like.delete()
+            else:
+                rating = like.change_mind()
+
+        return rating

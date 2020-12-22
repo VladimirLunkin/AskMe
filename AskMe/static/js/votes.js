@@ -1,16 +1,18 @@
 $('.js-votes').click(function(ev) {
-    var $this = $(this),
-        action = $this.data('action'),
-        id = $this.data('id');
+    let $this = $(this),
+        type = $this.data('type'),
+        id = $this.data('id'),
+        action = $this.data('action');
     $.ajax('/votes/', {
         method: 'POST',
         data: {
-            action: action,
+            type: type,
             id: id,
+            action: action,
         },
     }).done(function(data) {
         like = data.question_like,
         $('#rating-' + id).text(data.rating);
     });
-    console.log("Click! " + action + " " + id);
+    console.log(type + " " + id + ": " + action);
 })

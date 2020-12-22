@@ -2,7 +2,7 @@
 <div class="row media d-flex flex-wrap question-box">
 	<div class="d-flex px-1 mr-4 flex-column">
 		<img src="{% static question.profile_id.avatar %}" class="question-img mb-2" alt="...">
-		{% include 'inc/like.html' with like=question.like pk=question.pk %}
+		{% include 'inc/like.html' with type="question" pk=question.pk rating=question.rating %}
 	</div>
 	<div class="media-body px-1">
 		<a href="{% url 'question' question.id %}" class="h5 mt-0"><u>{{ question.title }}</u></a>

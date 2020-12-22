@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 
 from app.models import *
 from django.contrib.auth.models import User
-from app.forms import LoginForm, AskForm, AnswerForm, SignupForm, SettingsForm
+from app.forms import *
 
 
 def paginate(objects_list, request, limit=2):
@@ -136,11 +136,12 @@ def signup(request):
 @login_required
 def votes(request):
     data=request.POST
-    # form = LikeForm(user=request.user.profile, data=data)
-    # rating = form.save()
+    rating = 0
+    if data['type'] == 'question':
+        form = LikeQuestionForm(user=request.user.profile, question=data['id'], is_like=(data['action'] == 'like'))
+        rating = form.save()
+    elif data['type'] == 'answer':
+        form = LikeAnswerForm(user=request.user.profile, answer=data['id'], is_like=(data['action'] == 'like'))
+        rating = form.save()
 
-    like = LikeQuestion(question_id=Question.objects.get(id=data['id']), profile_id=request.user.profile, is_like=(data['action'] == 'like'))
-    like.save()
-
-    rating = Question.objects.get(id=data['id']).like
     return JsonResponse({'rating': rating})

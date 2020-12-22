@@ -58,7 +58,7 @@ class QuestionManager(models.Manager):
         return self.filter(tags__tag=tag).order_by('-date_create')
 
     def hot(self):
-        return self.order_by('-like', '-date_create')
+        return self.order_by('-rating', '-date_create')
 
 
 class Question(models.Model):
@@ -67,7 +67,7 @@ class Question(models.Model):
     text = models.TextField(verbose_name='Текст вопроса')
     tags = models.ManyToManyField(Tag, verbose_name='Теги')
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
-    like = models.IntegerField(default=0, verbose_name='Лайки')
+    rating = models.IntegerField(default=0, verbose_name='Рейтинг')
     number_of_answers = models.IntegerField(default=0, verbose_name='Количество ответов')
 
     objects = QuestionManager()
@@ -82,7 +82,7 @@ class Question(models.Model):
 
 class AnswerManager(models.Manager):
     def by_question(self, pk):
-        return self.filter(question_id=pk).order_by('-like', 'date_create')
+        return self.filter(question_id=pk).order_by('-rating', 'date_create')
 
 
 class Answer(models.Model):
@@ -91,7 +91,7 @@ class Answer(models.Model):
     text = models.TextField(verbose_name='Текст ответа')
     is_correct = models.BooleanField(default=False, verbose_name='Корректность ответа')
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
-    like = models.IntegerField(default=0, verbose_name='Лайки')
+    rating = models.IntegerField(default=0, verbose_name='Рейтинг')
 
     objects = AnswerManager()
 
@@ -120,24 +120,39 @@ class LikeQuestion(models.Model):
     is_like = models.BooleanField(default=True, verbose_name='Лайк или дизлайк')
 
     def __str__(self):
-        return self.profile_id.user_id.get_username() + ' лайкнул "' + self.question_id.title + '"'
+        action = 'дизлайкнул'
+        if self.is_like:
+            action = 'лайкнул'
+        return self.profile_id.user_id.get_username() + ' ' + action + ' "' + self.question_id.title + '"'
 
     def save(self, *args, **kwargs):
         if not self.pk:
             if self.is_like:
-                self.question_id.like += 1
+                self.question_id.rating += 1
             else:
-                self.question_id.like -= 1
+                self.question_id.rating -= 1
             self.question_id.save()
         super(LikeQuestion, self).save(*args, **kwargs)
+        return self.question_id.rating
 
     def delete(self, *args, **kwargs):
         if self.is_like:
-            self.question_id.like -= 1
+            self.question_id.rating -= 1
         else:
-            self.question_id.like += 1
+            self.question_id.rating += 1
         self.question_id.save()
         super(LikeQuestion, self).delete(*args, **kwargs)
+        return self.question_id.rating
+
+    def change_mind(self):
+        if self.is_like:
+            self.question_id.rating -= 2
+        else:
+            self.question_id.rating += 2
+        self.is_like = not self.is_like
+        self.save()
+        self.question_id.save()
+        return self.question_id.rating
 
     class Meta:
         unique_together = ('question_id', 'profile_id')
@@ -151,24 +166,39 @@ class LikeAnswer(models.Model):
     is_like = models.BooleanField(default=True, verbose_name='Лайк или дизлайк')
 
     def __str__(self):
-        return self.profile_id.user_id.get_username() + ' лайкнул "' + self.answer_id.question_id.title + '"'
+        action = 'дизлайкнул'
+        if self.is_like:
+            action = 'лайкнул'
+        return self.profile_id.user_id.get_username() + ' ' + action + ' "' + self.answer_id.text + '"'
 
     def save(self, *args, **kwargs):
         if not self.pk:
             if self.is_like:
-                self.answer_id.like += 1
+                self.answer_id.rating += 1
             else:
-                self.answer_id.like -= 1
+                self.answer_id.rating -= 1
             self.answer_id.save()
         super(LikeAnswer, self).save(*args, **kwargs)
+        return self.answer_id.rating
 
     def delete(self, *args, **kwargs):
         if self.is_like:
-            self.answer_id.like -= 1
+            self.answer_id.rating -= 1
         else:
-            self.answer_id.like += 1
+            self.answer_id.rating += 1
         self.answer_id.save()
         super(LikeAnswer, self).delete(*args, **kwargs)
+        return self.answer_id.rating
+
+    def change_mind(self):
+        if self.is_like:
+            self.answer_id.rating -= 2
+        else:
+            self.answer_id.rating += 2
+        self.is_like = not self.is_like
+        self.save()
+        self.answer_id.save()
+        return self.answer_id.rating
 
     class Meta:
         unique_together = ('answer_id', 'profile_id')
