@@ -1,7 +1,7 @@
 {% load static %}
 <div class="row media d-flex flex-wrap question-box">
 	<div class="d-flex px-1 mr-4 flex-column">
-		<img src="{% static question.profile_id.avatar %}" class="question-img mb-2" alt="...">
+		<img src="{{ question.profile_id.avatar.url }}" class="question-img mb-2" alt="...">
 		{% include 'inc/like.html' with type="question" pk=question.pk rating=question.rating %}
 	</div>
 	<div class="media-body px-1">

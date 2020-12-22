@@ -1,16 +1,23 @@
 {% load static %}
 <div class="row media d-flex flex-wrap question-box">
 	<div class="d-flex px-1 mr-4 flex-column">
-		<img src="{% static answer.profile_id.avatar %}" class="question-img mb-2" alt="...">
+		<img src="{{ answer.profile_id.avatar.url }}" class="question-img mb-2" alt="...">
 		{% include 'inc/like.html' with type="answer" pk=answer.pk rating=answer.rating %}
     </div>
     <div class="media-body px-1">
         <p>{{ answer.text }}</p>
         <div class="form-check is-valid">
-            <input class="form-check-input" type="checkbox" id="id_is_correct" {% if answer.is_correct %} checked {% endif %} {% if question.profile_id != request.user.profile %} disabled {% endif %}>
-            <label class="form-check-label" for="id_is_correct" {% if answer.is_correct %} style="color: #28a745;" {% endif %}>
+            {% if question.profile_id == request.user.profile %}
+            <input class="js-correct" data-id="{{ answer.pk }}" type="checkbox" id="correct-{{ answer.pk }}" {% if answer.is_correct %} checked {% endif %}>
+            <label class="form-check-label" for="correct-{{ answer.pk }}" {% if answer.is_correct %} style="color: #28a745;" {% endif %}>
 				Correct!
             </label>
+            {% else %}
+            <input class="js-correct form-check-input" data-id="{{ answer.pk }}" type="checkbox" id="correct1-{{ answer.pk }}" {% if answer.is_correct %} checked {% endif %}  disabled>
+            <label class="form-check-label" for="correct-{{ answer.pk }}" {% if answer.is_correct %} style="color: #28a745;" {% endif %}>
+				Correct!
+            </label>
+            {% endif %}
         </div>
     </div>
 </div>

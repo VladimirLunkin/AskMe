@@ -7,7 +7,7 @@
 {% endblock heading %}
 
 {% block content %}
-<form method="post" novalidate>
+<form method="post" novalidate enctype="multipart/form-data">
     {% csrf_token %}
 
     {% if form_updated %}
@@ -57,8 +57,9 @@
         <div class="col-sm-5">
             <img src="{% static request.user.profile.avatar %}" class="img-settings img-thumbnail">
             <div class="custom-file mt-2">
-                <input type="file" class="custom-file-input" id="id_avatar" name="avatar">
-                <label class="custom-file-label" for="id_avatar" data-browse="choose">{{ request.user.profile.avatar }}</label>
+                {{ ava }}
+<!--                <input type="file" class="custom-file-input" id="id_avatar" name="avatar">-->
+<!--                <label class="custom-file-label" for="id_avatar" data-browse="choose">{{ request.user.profile.avatar }}</label>-->
             </div>
         </div>
     </div>

@@ -15,7 +15,7 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True, verbose_name='Профиль')
-    avatar = models.ImageField(default='img/no_avatar.png', verbose_name='Аватар')
+    avatar = models.ImageField(default='img/no_avatar.png', upload_to='avatar/%y/%m/%d', verbose_name='Аватар')
 
     objects = ProfileManager()
 
@@ -108,6 +108,10 @@ class Answer(models.Model):
         self.question_id.number_of_answers -= 1
         self.question_id.save()
         super(Answer, self).delete(*args, **kwargs)
+
+    def change_mind_correct(self):
+        self.is_correct = not self.is_correct
+        self.save()
 
     class Meta:
         verbose_name = 'Ответ'

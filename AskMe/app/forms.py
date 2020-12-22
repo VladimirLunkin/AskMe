@@ -103,11 +103,11 @@ class SignupForm(forms.ModelForm):
                                    'class': 'form-control',
                                }),
                                label='Password check')
-    avatar = forms.ImageField(required=False,
-                               widget=FileInput(attrs={
-                                   'class': 'custom-file',
-                               }),
-                               label='Avatar')
+    # avatar = forms.ImageField(required=False,
+    #                            widget=FileInput(attrs={
+    #                                'class': 'custom-file',
+    #                            }),
+    #                            label='Avatar')
 
     class Meta:
         model = User
@@ -169,11 +169,11 @@ class SettingsForm(forms.ModelForm):
                                     'class': 'form-control',
                                 }),
                                 label='Password check')
-    avatar = forms.ImageField(required=False,
-                              widget=FileInput(attrs={
-                                  'class': 'custom-file',
-                              }),
-                              label='Avatar')
+    # avatar = forms.ImageField(required=False,
+    #                           widget=FileInput(attrs={
+    #                               'class': 'custom-file',
+    #                           }),
+    #                           label='Avatar')
 
     class Meta:
         model = User
@@ -227,13 +227,19 @@ class SettingsForm(forms.ModelForm):
 
         self.user.set_password(self.cleaned_data['password'])
 
-        if self.cleaned_data['avatar'] is not None:
-            self.user.profile.avatar = self.cleaned_data['avatar']
+        # if self.cleaned_data['avatar'] is not None:
+        #     self.user.profile.avatar = self.cleaned_data['avatar']
 
         self.user.save()
 
         return self.user
 
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['avatar']
+        required = None
 
 class LikeQuestionForm:
     def __init__(self, user, question, is_like):

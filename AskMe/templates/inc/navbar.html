@@ -11,7 +11,7 @@
         {% if request.user.is_authenticated %}
         <div class="mr-md-0 d-flex mt-md-2" style="margin-right: 200px">
             <div class="row mx-2">
-                <img src="{% static request.user.profile.avatar %}" class="avatar-img rounded">
+                <img src="{{ request.user.profile.avatar.url }}" class="avatar-img rounded">
             </div>
             <div class="d-flex flex-column bd-highlight mb-2">
                 <div>

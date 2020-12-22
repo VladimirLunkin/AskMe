@@ -1,7 +1,11 @@
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from app import views
+
+admin.autodiscover()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,6 +17,7 @@ urlpatterns = [
     path('settings/', views.settings, name='settings'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('votes/', views.votes, name='votes'),
     path('signup/', views.signup, name='signup'),
-]
+    path('votes/', views.votes, name='votes'),
+    path('correct/', views.is_correct, name='correct'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

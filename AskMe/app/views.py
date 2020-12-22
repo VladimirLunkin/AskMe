@@ -41,7 +41,7 @@ def create_ask(request):
 
 def question_page(request, pk):
     question = Question.objects.get(id=pk)
-    answers_page = paginate(Answer.objects.by_question(pk), request, limit=1)
+    answers_page = paginate(Answer.objects.by_question(pk), request, limit=10)
 
     if request.method == 'GET':
         form = AnswerForm()
@@ -82,15 +82,19 @@ def settings(request):
     form_updated = False
     if request.method == 'GET':
         form = SettingsForm()
+        ava = ImageForm(data=request.POST)
     else:
         form = SettingsForm(user=request.user, data=request.POST)
+        ava = ImageForm(data=request.POST, files=request.FILES, instance=request.user.profile)
         if form.is_valid():
             user = form.save()
+            ava.save()
             form_updated = True
             login(request, user)
     return render(request, 'settings.html', {
         'form': form,
         'form_updated': form_updated,
+        'ava': ava,
     })
 
 
@@ -121,14 +125,18 @@ def logout_view(request):
 def signup(request):
     if request.method == 'GET':
         form = SignupForm()
+        # ava = ImageForm()
     else:
         form = SignupForm(data=request.POST)
+        # ava = ImageForm(data=request.POST, files=request.FILES, instance=request.user.profile)
         if form.is_valid():
+            # ava.save()
             user = form.save()
             login(request, user)
             return redirect(request.POST.get('next', '/'))
     return render(request, 'signup.html', {
         'form': form,
+        # 'ava': ava,
     })
 
 
@@ -145,3 +153,13 @@ def votes(request):
         rating = form.save()
 
     return JsonResponse({'rating': rating})
+
+
+@require_POST
+@login_required
+def is_correct(request):
+    data=request.POST
+    answer = Answer.objects.get(pk=data['id'])
+    if Answer.objects.filter(question_id=answer.question_id, is_correct=True).count() < 3 or answer.is_correct:
+        answer.change_mind_correct()
+    return JsonResponse({'action': answer.is_correct})

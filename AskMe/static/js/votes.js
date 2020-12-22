@@ -11,7 +11,6 @@ $('.js-votes').click(function(ev) {
             action: action,
         },
     }).done(function(data) {
-        like = data.question_like,
         $('#rating-' + id).text(data.rating);
     });
     console.log(type + " " + id + ": " + action);
