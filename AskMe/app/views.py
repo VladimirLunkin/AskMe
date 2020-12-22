@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, reverse
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
-from app.models import Question, Answer, Tag, Profile
+from app.models import *
 from django.contrib.auth.models import User
 from app.forms import LoginForm, AskForm, AnswerForm, SignupForm, SettingsForm
 
@@ -128,3 +130,17 @@ def signup(request):
     return render(request, 'signup.html', {
         'form': form,
     })
+
+
+@require_POST
+@login_required
+def votes(request):
+    data=request.POST
+    # form = LikeForm(user=request.user.profile, data=data)
+    # rating = form.save()
+
+    like = LikeQuestion(question_id=Question.objects.get(id=data['id']), profile_id=request.user.profile, is_like=(data['action'] == 'like'))
+    like.save()
+
+    rating = Question.objects.get(id=data['id']).like
+    return JsonResponse({'rating': rating})

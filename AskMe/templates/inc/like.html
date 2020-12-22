@@ -1,5 +1,7 @@
-<div class="btn-group" role="group">
-    <button type="button" class="btn btn-outline-dark btn-sm">&nbsp;&#9757;&nbsp;</button>
-    <span class="btn btn-outline-dark btn-sm">{{ like }}</span>
-    <button type="button" class="btn btn-outline-dark btn-sm">&nbsp;&#129318;&nbsp;</button>
-</div>
+<form method="post">
+    <div class="btn-group" role="group">
+        <button type="button" href="#" class="js-votes btn btn-outline-dark btn-sm" data-action="like" data-id="{{ pk }}">&nbsp;&#9757;&nbsp;</button>
+        <span class="btn btn-outline-dark btn-sm" id="rating-{{ pk }}">{{ like }}</span>
+        <button type="button" href="" class="js-votes btn btn-outline-dark btn-sm" data-action="dislike" data-id="{{ pk }}">&nbsp;&#129318;&nbsp;</button>
+    </div>
+</form>
