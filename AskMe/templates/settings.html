@@ -55,11 +55,9 @@
     <div class="form-group row">
         <label for="id_avatar" class="col-sm-3 col-form-label">Upload avatar</label>
         <div class="col-sm-5">
-            <img src="{% static request.user.profile.avatar %}" class="img-settings img-thumbnail">
+            <img src="{{ request.user.profile.avatar.url }}" class="img-settings img-thumbnail">
             <div class="custom-file mt-2">
                 {{ ava }}
-<!--                <input type="file" class="custom-file-input" id="id_avatar" name="avatar">-->
-<!--                <label class="custom-file-label" for="id_avatar" data-browse="choose">{{ request.user.profile.avatar }}</label>-->
             </div>
         </div>
     </div>

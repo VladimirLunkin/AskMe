@@ -99,15 +99,10 @@ class AnswerForm(forms.ModelForm):
 
 class SignupForm(forms.ModelForm):
     password2 = forms.CharField(required=True,
-                               widget=PasswordInput(attrs={
+                                widget=PasswordInput(attrs={
                                    'class': 'form-control',
                                }),
-                               label='Password check')
-    # avatar = forms.ImageField(required=False,
-    #                            widget=FileInput(attrs={
-    #                                'class': 'custom-file',
-    #                            }),
-    #                            label='Avatar')
+                                label='Password check')
 
     class Meta:
         model = User
@@ -156,9 +151,6 @@ class SignupForm(forms.ModelForm):
         user = User.objects.create_user(username, email, password)
 
         Profile.objects.create(user_id=user)
-        avatar = self.cleaned_data['avatar']
-        if avatar is not None:
-            Profile.avatar.set(avatar)
 
         return user
 
@@ -169,11 +161,6 @@ class SettingsForm(forms.ModelForm):
                                     'class': 'form-control',
                                 }),
                                 label='Password check')
-    # avatar = forms.ImageField(required=False,
-    #                           widget=FileInput(attrs={
-    #                               'class': 'custom-file',
-    #                           }),
-    #                           label='Avatar')
 
     class Meta:
         model = User
@@ -227,9 +214,6 @@ class SettingsForm(forms.ModelForm):
 
         self.user.set_password(self.cleaned_data['password'])
 
-        # if self.cleaned_data['avatar'] is not None:
-        #     self.user.profile.avatar = self.cleaned_data['avatar']
-
         self.user.save()
 
         return self.user
@@ -239,7 +223,7 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar']
-        required = None
+
 
 class LikeQuestionForm:
     def __init__(self, user, question, is_like):

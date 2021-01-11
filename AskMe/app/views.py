@@ -41,7 +41,7 @@ def create_ask(request):
 
 def question_page(request, pk):
     question = Question.objects.get(id=pk)
-    answers_page = paginate(Answer.objects.by_question(pk), request, limit=10)
+    answers_page = paginate(Answer.objects.by_question(pk), request, limit=1)
 
     if request.method == 'GET':
         form = AnswerForm()
@@ -125,14 +125,16 @@ def logout_view(request):
 def signup(request):
     if request.method == 'GET':
         form = SignupForm()
-        # ava = ImageForm()
+        ava = ImageForm()
     else:
         form = SignupForm(data=request.POST)
-        # ava = ImageForm(data=request.POST, files=request.FILES, instance=request.user.profile)
-        if form.is_valid():
-            # ava.save()
+        ava = ImageForm()
+        if form.is_valid(): # and ava.is_valid():
             user = form.save()
             login(request, user)
+
+            # ava = ImageForm(data=request.POST, files=request.FILES, instance=request.user.profile)
+            # ava.save()
             return redirect(request.POST.get('next', '/'))
     return render(request, 'signup.html', {
         'form': form,
