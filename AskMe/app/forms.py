@@ -150,8 +150,6 @@ class SignupForm(forms.ModelForm):
         password = self.cleaned_data['password']
         user = User.objects.create_user(username, email, password)
 
-        Profile.objects.create(user_id=user)
-
         return user
 
 
@@ -223,6 +221,10 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avatar']
+
+
+class AvaForm(forms.Form):
+    ava = forms.FileField(required=False)
 
 
 class LikeQuestionForm:

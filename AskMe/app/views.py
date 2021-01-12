@@ -86,7 +86,7 @@ def settings(request):
     else:
         form = SettingsForm(user=request.user, data=request.POST)
         ava = ImageForm(data=request.POST, files=request.FILES, instance=request.user.profile)
-        if form.is_valid():
+        if form.is_valid() and ava.is_valid():
             user = form.save()
             ava.save()
             form_updated = True
@@ -125,27 +125,28 @@ def logout_view(request):
 def signup(request):
     if request.method == 'GET':
         form = SignupForm()
-        ava = ImageForm()
+        ava = AvaForm()
     else:
         form = SignupForm(data=request.POST)
-        ava = ImageForm()
-        if form.is_valid(): # and ava.is_valid():
+        ava = AvaForm(data=request.POST, files=request.FILES)
+        if form.is_valid() and ava.is_valid():
             user = form.save()
+            profile = Profile.objects.create(user_id=user)
+            if ava.cleaned_data.get('ava') is not None:
+                profile.avatar = ava.cleaned_data.get('ava')
+                profile.save()
             login(request, user)
-
-            # ava = ImageForm(data=request.POST, files=request.FILES, instance=request.user.profile)
-            # ava.save()
             return redirect(request.POST.get('next', '/'))
     return render(request, 'signup.html', {
         'form': form,
-        # 'ava': ava,
+        'ava': ava,
     })
 
 
 @require_POST
 @login_required
 def votes(request):
-    data=request.POST
+    data = request.POST
     rating = 0
     if data['type'] == 'question':
         form = LikeQuestionForm(user=request.user.profile, question=data['id'], is_like=(data['action'] == 'like'))
@@ -160,7 +161,7 @@ def votes(request):
 @require_POST
 @login_required
 def is_correct(request):
-    data=request.POST
+    data = request.POST
     answer = Answer.objects.get(pk=data['id'])
     if Answer.objects.filter(question_id=answer.question_id, is_correct=True).count() < 3 or answer.is_correct:
         answer.change_mind_correct()

@@ -1,8 +1,14 @@
 {% csrf_token %}
 <form method="post">
     <div class="btn-group" role="group">
-        <button type="button" class="js-votes btn btn-outline-dark btn-sm" data-type="{{ type }}" data-id="{{ pk }}" data-action="like">&nbsp;&#9757;&nbsp;</button>
-        <span class="btn btn-outline-dark btn-sm" id="rating-{{ pk }}">{{ rating }}</span>
-        <button type="button" class="js-votes btn btn-outline-dark btn-sm" data-type="{{ type }}" data-id="{{ pk }}" data-action="dislike">&nbsp;&#129318;&nbsp;</button>
+        {% if request.user.is_authenticated %}
+            <button type="button" class="js-votes btn btn-outline-dark btn-sm" data-type="{{ type }}" data-id="{{ pk }}" data-action="like">&nbsp;&#9757;&nbsp;</button>
+            <span class="btn btn-outline-dark btn-sm" id="rating-{{ pk }}">{{ rating }}</span>
+            <button type="button" class="js-votes btn btn-outline-dark btn-sm" data-type="{{ type }}" data-id="{{ pk }}" data-action="dislike">&nbsp;&#129318;&nbsp;</button>
+        {% else %}
+            <button type="button" class="js-not-authorized btn btn-outline-dark btn-sm">&nbsp;&#9757;&nbsp;</button>
+            <span class="btn btn-outline-dark btn-sm" id="">{{ rating }}</span>
+            <button type="button" class="js-not-authorized btn btn-outline-dark btn-sm">&nbsp;&#129318;&nbsp;</button>
+        {% endif %}
     </div>
 </form>

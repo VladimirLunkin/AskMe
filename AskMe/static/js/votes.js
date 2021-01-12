@@ -15,3 +15,7 @@ $('.js-votes').click(function(ev) {
     });
     console.log(type + " " + id + ": " + action);
 })
+
+$('.js-not-authorized').click(function(ev) {
+    alert("Please log in");
+})
