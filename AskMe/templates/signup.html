@@ -21,26 +21,6 @@
             </div>
     {% endfor %}
 
-    <div class="form-group row mt-2">
-        <label class="col-sm-3 col-form-label">{{ form_field.label }}</label>
-        <div class="col-sm-9">
-            {{ ava }}
-            <div class="invalid-feedback d-block">
-                {{ ava.errors }}
-            </div>
-        </div>
-    </div>
-
-
-<!--    <div class="form-group row">-->
-<!--        <label for="id_avatar" class="col-sm-3 col-form-label">Upload avatar</label>-->
-<!--        <div class="col-sm-5">-->
-<!--            <div class="custom-file">-->
-<!--                {{ ava }}-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
     {% if request.GET.next %}
         <input type="hidden" name="next" value="{{ request.GET.next }}">
     {% endif %}

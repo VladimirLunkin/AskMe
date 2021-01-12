@@ -10,6 +10,7 @@ from app.models import *
 from django.contrib.auth.models import User
 from app.forms import *
 
+from django.forms import modelformset_factory
 
 def paginate(objects_list, request, limit=2):
     paginator = Paginator(objects_list, limit)
@@ -81,8 +82,8 @@ def questions_by_tag(request, tag):
 def settings(request):
     form_updated = False
     if request.method == 'GET':
-        form = SettingsForm()
-        ava = ImageForm(data=request.POST)
+        form = SettingsForm(initial={'username': request.user.username, 'email': request.user.email})
+        ava = ImageForm()
     else:
         form = SettingsForm(user=request.user, data=request.POST)
         ava = ImageForm(data=request.POST, files=request.FILES, instance=request.user.profile)
@@ -125,21 +126,14 @@ def logout_view(request):
 def signup(request):
     if request.method == 'GET':
         form = SignupForm()
-        ava = AvaForm()
     else:
-        form = SignupForm(data=request.POST)
-        ava = AvaForm(data=request.POST, files=request.FILES)
-        if form.is_valid() and ava.is_valid():
+        form = SignupForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
             user = form.save()
-            profile = Profile.objects.create(user_id=user)
-            if ava.cleaned_data.get('ava') is not None:
-                profile.avatar = ava.cleaned_data.get('ava')
-                profile.save()
             login(request, user)
             return redirect(request.POST.get('next', '/'))
     return render(request, 'signup.html', {
         'form': form,
-        'ava': ava,
     })
 
 

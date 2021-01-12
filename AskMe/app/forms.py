@@ -101,8 +101,10 @@ class SignupForm(forms.ModelForm):
     password2 = forms.CharField(required=True,
                                 widget=PasswordInput(attrs={
                                    'class': 'form-control',
-                               }),
+                                }),
                                 label='Password check')
+    ava = forms.FileField(required=False,
+                          label='Avatar')
 
     class Meta:
         model = User
@@ -149,6 +151,11 @@ class SignupForm(forms.ModelForm):
         email = self.cleaned_data['email']
         password = self.cleaned_data['password']
         user = User.objects.create_user(username, email, password)
+
+        profile = Profile.objects.create(user_id=user)
+        if self.cleaned_data['ava'] is not None:
+            profile.avatar = self.cleaned_data['ava']
+            profile.save()
 
         return user
 
@@ -222,9 +229,9 @@ class ImageForm(forms.ModelForm):
         model = Profile
         fields = ['avatar']
 
-
-class AvaForm(forms.Form):
-    ava = forms.FileField(required=False)
+        labels = {
+            'avatar': 'Upload avatar',
+        }
 
 
 class LikeQuestionForm:
