@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from random import sample, randint
+
+from random import sample
 
 
 class ProfileManager(models.Manager):
@@ -10,7 +11,7 @@ class ProfileManager(models.Manager):
                 'id', flat=True
             )
         )
-        return Profile.objects.filter(id__in=sample(profile_ids, k=count))
+        return self.filter(id__in=sample(profile_ids, k=count))
 
 
 class Profile(models.Model):
@@ -28,17 +29,20 @@ class Profile(models.Model):
 
 
 class TagManager(models.Manager):
-    def create_question(self):
-        tag_ids = list(
-            Tag.objects.values_list(
-                'id', flat=True
-            )
-        )
-        return Tag.objects.filter(id__in=sample(tag_ids, k=randint(1, 3)))
+    def create_question(self, tags_list):
+        tags = self.filter(tag__in=tags_list)
+        for tag in tags:
+            tag.rating += 1
+            tag.save()
+        return tags
+
+    def popular_tags(self):
+        return self.all().order_by('-rating')[:20]
 
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=32, verbose_name='Тег')
+    tag = models.CharField(unique=True, max_length=32, verbose_name='Тег')
+    rating = models.IntegerField(default=0, verbose_name='Рейтинг')
 
     objects = TagManager()
 
@@ -55,7 +59,7 @@ class QuestionManager(models.Manager):
         return self.order_by('-date_create')
 
     def by_tag(self, tag):
-        return self.filter(tags__tag=tag).order_by('-date_create')
+        return self.filter(tags__tag=tag).order_by('-rating', '-date_create')
 
     def hot(self):
         return self.order_by('-rating', '-date_create')

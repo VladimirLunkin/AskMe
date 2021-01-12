@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from app.models import Profile, Question, Answer, Tag, LikeQuestion, LikeAnswer
-from random import choice
+from random import choice, sample, randint
 from faker import Faker
 
 f = Faker()
@@ -11,6 +11,7 @@ class Command(BaseCommand):
     help = 'Closes the specified poll for voting'
 
     def add_arguments(self, parser):
+        parser.add_argument('--auto', nargs='+', type=int)
         parser.add_argument('--users', nargs='+', type=int)
         parser.add_argument('--questions', nargs='+', type=int)
         parser.add_argument('--answers', nargs='+', type=int)
@@ -20,6 +21,9 @@ class Command(BaseCommand):
         parser.add_argument('--db_size', nargs='+', type=str)
 
     def handle(self, *args, **options):
+        if options['auto']:
+            self.fill_db(options['auto'][0])
+
         if options['users']:
             self.fill_profile(options['users'][0])
 
@@ -53,9 +57,10 @@ class Command(BaseCommand):
     @staticmethod
     def fill_tag(cnt):
         for i in range(cnt):
-            Tag.objects.create(
-                tag=f.word(),
-            )
+            tag = f.word()
+            while Tag.objects.filter(tag=tag).exists():
+                tag = f.word()
+            Tag.objects.create(tag=tag)
 
     @staticmethod
     def fill_questions(cnt):
@@ -65,7 +70,14 @@ class Command(BaseCommand):
                 title=f.sentence(),
                 text=f.text(),
             )
-            q.tags.set(Tag.objects.create_question()),
+
+            tag_ids = list(
+                Tag.objects.values_list(
+                    'tag', flat=True
+                )
+            )
+            tags_list = sample(tag_ids, k=randint(1, 3))
+            q.tags.set(Tag.objects.create_question(tags_list))
 
     @staticmethod
     def fill_answers(cnt):
@@ -116,3 +128,11 @@ class Command(BaseCommand):
                     break
             if count == cnt:
                 break
+
+    def fill_db(self, cnt):
+        self.fill_profile(cnt)
+        self.fill_tag(cnt // 2)
+        self.fill_questions(3 * cnt)
+        self.fill_answers(10 * cnt)
+        self.fill_likes_questions(5 * cnt)
+        self.fill_likes_answers(20 * cnt)

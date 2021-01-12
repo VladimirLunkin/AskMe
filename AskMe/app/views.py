@@ -10,7 +10,6 @@ from app.models import *
 from django.contrib.auth.models import User
 from app.forms import *
 
-from django.forms import modelformset_factory
 
 def paginate(objects_list, request, limit=2):
     paginator = Paginator(objects_list, limit)
@@ -21,13 +20,16 @@ def paginate(objects_list, request, limit=2):
 
 def new_questions(request):
     questions_page = paginate(Question.objects.all(), request)
+    popular_tags = Tag.objects.popular_tags()
     return render(request, 'new_questions.html', {
         'content': questions_page,
+        'popular_tags': popular_tags,
     })
 
 
 @login_required
 def create_ask(request):
+    popular_tags = Tag.objects.popular_tags()
     if request.method == 'GET':
         form = AskForm()
     else:
@@ -37,12 +39,14 @@ def create_ask(request):
             return redirect(reverse('question', kwargs={'pk': question.pk}))
     return render(request, 'create_ask.html',{
         'form': form,
+        'popular_tags': popular_tags,
     })
 
 
 def question_page(request, pk):
     question = Question.objects.get(id=pk)
     answers_page = paginate(Answer.objects.by_question(pk), request, limit=1)
+    popular_tags = Tag.objects.popular_tags()
 
     if request.method == 'GET':
         form = AnswerForm()
@@ -60,21 +64,26 @@ def question_page(request, pk):
         'question': question,
         'content': answers_page,
         'form': form,
+        'popular_tags': popular_tags,
     })
 
 
 def hot_questions(request):
     questions_page = paginate(Question.objects.hot(), request)
+    popular_tags = Tag.objects.popular_tags()
     return render(request, 'hot_questions.html', {
         'content': questions_page,
+        'popular_tags': popular_tags,
     })
 
 
 def questions_by_tag(request, tag):
     questions_page = paginate(Question.objects.by_tag(tag), request)
+    popular_tags = Tag.objects.popular_tags()
     return render(request, 'questions_by_tag.html', {
         'content': questions_page,
         'tag': tag,
+        'popular_tags': popular_tags,
     })
 
 

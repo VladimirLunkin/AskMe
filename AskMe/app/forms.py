@@ -65,7 +65,8 @@ class AskForm(forms.ModelForm):
         for tag in self.tags:
             if not Tag.objects.filter(tag=tag).exists():
                 Tag.objects.create(tag=tag)
-        question.tags.set(Tag.objects.filter(tag__in=self.tags))
+        question.tags.set(Tag.objects.create_question(self.tags))
+
         return question
 
 

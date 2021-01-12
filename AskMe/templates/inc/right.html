@@ -2,24 +2,18 @@
     <div class="p-2 mb-2">
         <h3 class="text-dark">Popular Tags</h3>
         <div class="d-flex flex-wrap h5">
-            <a class="my-1 mr-2 text-info" href="#">perl</a>
-            <a class="my-1 mr-2 text-danger" href="/tag/python/">python</a>
-            <!--<a class="my-1 mr-2 text-danger" href="{% url 'questions_by_tag' %">python</a>-->
-            <a class="my-1 mr-2 text-success" href="#">TechnoPark</a>
-            <a class="my-1 mr-2 text-muted" href="#">MySQL</a>
-            <a class="my-1 mr-2 text-dark" href="#">django</a>
-            <a class="my-1 mr-2 text-warning" href="#">Mail.Ru</a>
-            <a class="my-1 mr-2 " href="#">Google</a>
-            <a class="my-1 mr-2 text-dark" href="#">Firefox</a>
+            {% for tag in popular_tags %}
+                <a class="my-1 mr-2 text-success" href="{% url 'questions_by_tag' tag %}">{{ tag }}</a>
+            {% endfor %}
         </div>
     </div>
-    <div class="p-2">
-        <div class="list-group list-group-flush">
-            <h3 class="text-dark">Best Members</h3>
-            <a href="#" class="my-1"><u>Mr. Freeman</u></a>
-            <a href="#" class="my-1"><u>Dr. House</u></a>
-            <a href="#" class="my-1"><u>Bender</u></a>
-            <a href="#" class="my-1"><u>Queen Victoria</u></a>
-        </div>
-    </div>
+<!--    <div class="p-2">-->
+<!--        <div class="list-group list-group-flush">-->
+<!--            <h3 class="text-dark">Best Members</h3>-->
+<!--            <a href="#" class="my-1"><u>Mr. Freeman</u></a>-->
+<!--            <a href="#" class="my-1"><u>Dr. House</u></a>-->
+<!--            <a href="#" class="my-1"><u>Bender</u></a>-->
+<!--            <a href="#" class="my-1"><u>Queen Victoria</u></a>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
