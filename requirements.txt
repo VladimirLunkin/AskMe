@@ -10,7 +10,6 @@ Click==7.0
 colorama==0.4.3
 cpplint==1.5.4
 cryptography==2.8
-cupshelpers==1.0
 dbus-python==1.2.16
 decorator==4.4.2
 defer==1.0.6
