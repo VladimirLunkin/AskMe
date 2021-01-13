@@ -28,7 +28,6 @@ ipython==7.18.1
 ipython-genutils==0.2.0
 jedi==0.17.2
 keyring==18.0.1
-language-selector==0.1
 launchpadlib==1.10.13
 lazr.restfulclient==0.14.2
 lazr.uri==1.0.3
