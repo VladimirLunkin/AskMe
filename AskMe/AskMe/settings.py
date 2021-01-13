@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',
+    'AskMe.app',
     'bootstrap4',
 ]
 
@@ -42,7 +42,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'AskMe.urls'
+ROOT_URLCONF = 'AskMe.AskMe.urls'
 
 TEMPLATES = [
     {
@@ -60,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'AskMe.wsgi.application'
+WSGI_APPLICATION = 'AskMe.AskMe.wsgi.application'
 
 
 # Database
