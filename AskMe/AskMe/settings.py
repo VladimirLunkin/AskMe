@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,10 +26,10 @@ INSTALLED_APPS = [
     'bootstrap4',
 ]
 
-MIDDLEWARE_CLASSES = (
-    # Simplified static file serving.
-    # https://warehouse.python.org/project/whitenoise/
-    'whitenoise.middleware.WhiteNoiseMiddleware',)
+# MIDDLEWARE_CLASSES = (
+#     # Simplified static file serving.
+#     # https://warehouse.python.org/project/whitenoise/
+#     'whitenoise.middleware.WhiteNoiseMiddleware',)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,7 +66,6 @@ WSGI_APPLICATION = 'AskMe.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-import dj_database_url
 
 # for postgres
 DATABASES = {
@@ -77,8 +78,7 @@ DATABASES = {
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+WHITENOISE_USE_FINDERS = True
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -109,7 +109,8 @@ USE_TZ = True
 
 LOGIN_URL = '/login/'
 
-WHITENOISE_USE_FINDERS = True
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
