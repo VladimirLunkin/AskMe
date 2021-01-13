@@ -31,6 +31,7 @@ MIDDLEWARE_CLASSES = (
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,6 +64,8 @@ WSGI_APPLICATION = 'AskMe.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+import dj_database_url
+
 # for postgres
 DATABASES = {
     'default': {
@@ -73,6 +76,9 @@ DATABASES = {
         'PASSWORD': '251099',
     }
 }
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -102,6 +108,8 @@ USE_L10N = True
 USE_TZ = True
 
 LOGIN_URL = '/login/'
+
+WHITENOISE_USE_FINDERS = True
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
