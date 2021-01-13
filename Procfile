@@ -1,1 +1,1 @@
-web: gunicorn AskMe.AskMe.wsgi --log-file -
+web: gunicorn AskMe.wsgi --log-file -
