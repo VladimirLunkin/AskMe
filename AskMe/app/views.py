@@ -101,10 +101,12 @@ def settings(request):
             ava.save()
             form_updated = True
             login(request, user)
+    popular_tags = Tag.objects.popular_tags()
     return render(request, 'settings.html', {
         'form': form,
         'form_updated': form_updated,
         'ava': ava,
+        'popular_tags': popular_tags,
     })
 
 
@@ -118,8 +120,10 @@ def login_view(request):
             if profile is not None:
                 login(request, profile)
                 return redirect(request.POST.get('next', '/'))
+    popular_tags = Tag.objects.popular_tags()
     return render(request, 'login.html', {
         'form': form,
+        'popular_tags': popular_tags,
     })
 
 
@@ -141,8 +145,10 @@ def signup(request):
             user = form.save()
             login(request, user)
             return redirect(request.POST.get('next', '/'))
+    popular_tags = Tag.objects.popular_tags()
     return render(request, 'signup.html', {
         'form': form,
+        'popular_tags': popular_tags,
     })
 
 
