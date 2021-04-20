@@ -21,4 +21,8 @@ server {
  location /uploads {
    root /home/vladimir/Documents/AskMe/AskMe;
  }
+ location = /AskMe_static_page.html {
+   root /home/vladimir/Documents/AskMe/hw-6;
+ }
 }
+

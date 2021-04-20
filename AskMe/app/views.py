@@ -175,3 +175,9 @@ def is_correct(request):
     if Answer.objects.filter(question_id=answer.question_id, is_correct=True).count() < 3 or answer.is_correct:
         answer.change_mind_correct()
     return JsonResponse({'action': answer.is_correct})
+
+
+# gunicorn test
+def static_page(request):
+    return render(request, 'static_page.html', {
+    })
