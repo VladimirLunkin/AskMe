@@ -1,0 +1,24 @@
+upstream gunicorn_server {
+    server 127.0.0.1:8000;
+}
+
+server {
+ listen 80 default_server;
+ server_name askme.ru;
+ access_log /var/log/nginx/AskMe.access.log;
+ error_log /var/log/nginx/AskMe.error.log;
+
+ location / {
+   proxy_pass http://gunicorn_server;
+   proxy_set_header Host $host;
+   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+   proxy_cache askme_cache;
+   proxy_cache_valid 200 302 10m;
+ }
+ location /static {
+   root /home/vladimir/Documents/AskMe/AskMe;
+ }
+ location /uploads {
+   root /home/vladimir/Documents/AskMe/AskMe;
+ }
+}

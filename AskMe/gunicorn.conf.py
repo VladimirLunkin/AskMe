@@ -1,5 +1,5 @@
 import multiprocessing
 
 bind = "127.0.0.1:8000"
-workers = multiprocessing.cpu_count() * 2 + 1
-access_log = "var/tmp/gunicorn_access.log"
+workers = 2
+access_log = "/var/tmp/gunicorn/access.log"

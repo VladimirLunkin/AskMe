@@ -37,7 +37,7 @@ def create_ask(request):
         if form.is_valid():
             question = form.save()
             return redirect(reverse('question', kwargs={'pk': question.pk}))
-    return render(request, 'create_ask.html',{
+    return render(request, 'create_ask.html', {
         'form': form,
         'popular_tags': popular_tags,
     })
