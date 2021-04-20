@@ -1,24 +1,18 @@
-import gunicorn.app.base
-resp_html = b"""<html lang="en">
-<head>
-<meta charset="UTF-8">
-    <title>Test</title>
-</head>
-<body>
-    <a href="/?a7"><button>GET</button></a>
-    <form method="post">
-        <p><input name="data">
-        <button type="submit">POST</button>
-    </form>
-</body>
-</html>"""
+# curl -X GET 'http://127.0.0.1:8081?a=1&b=2'
+# curl -X POST 'http://127.0.0.1:8081?a=1&b=2'
 
 
 def simple_app(environ, start_response):
-    status = '200 OK'
-    response_headers = [('Content-type', 'text/html')]
-    start_response(status, response_headers)
     print(environ['REQUEST_METHOD'])
     print(environ['QUERY_STRING'])
-    print(environ)
-    return [resp_html]
+    params = ', '.join([param.split('=')[0] for param in environ['QUERY_STRING'].split('&')])
+    data = b"Hello, World!\n" \
+           + environ['REQUEST_METHOD'].encode() \
+           + "\n".encode() \
+           + params.encode() \
+           + "\n".encode()
+    start_response("200 OK", [
+        ("Content-Type", "text/plain"),
+        ("Content-Length", str(len(data)))
+    ])
+    return [data]
