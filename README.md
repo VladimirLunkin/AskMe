@@ -12,3 +12,5 @@
 - Верстка выполняется с использованием **Twitter Bootstrap**.
 - Взаимодействие интерфейса с пользователем обеспечивается **JavaScript/jQuery**.
 - Для авторизации и хранения пользователей используется **django.contrib.auth**.
+
+[Техническое задание](https://github.com/ziontab/tp-tasks/blob/master/files/markdown/technical_details.md)
